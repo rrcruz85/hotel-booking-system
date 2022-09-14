@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Hotel.Booking.Contract
+namespace Hotel.Booking.Contract.DataAccess
 {
     public interface IRepository<TEFEntity> : IDisposable
     {

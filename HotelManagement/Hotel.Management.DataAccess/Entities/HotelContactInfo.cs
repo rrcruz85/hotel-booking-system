@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Hotel.Booking.Contract.DataAccess;
 
 namespace Hotel.Management.DataAccess.Entities
 {
-    public partial class HotelContactInfo
+    public partial class HotelContactInfo: IEntity
     {
         public int Id { get; set; }
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hotel.Booking.Contract.DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Hotel.Booking.Contract.Impl

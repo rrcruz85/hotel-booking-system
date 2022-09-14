@@ -1,4 +1,4 @@
-﻿using Hotel.Booking.Contract;
+﻿using Hotel.Booking.Contract.DataAccess;
 
 namespace Hotel.Management.DataAccess.Interfaces
 {
