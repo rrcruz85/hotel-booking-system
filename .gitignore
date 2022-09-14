@@ -1,0 +1,16 @@
+/**/publish/**
+/**/*.vspscc
+/**/packages/**
+/**/node_modules/**
+/**/.vs/**
+*.user
+*.bak
+*~Stashed changes
+bin/
+obj/
+/.vs
+/.vs
+*.psess
+*.vspx
+/Temp
+/NDependOut/*
