@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hotel.Booking.Contract\Hotel.Booking.Contract.csproj" />
+    <ProjectReference Include="..\Hotel.Booking.Common.Contract\Hotel.Booking.Common.Contract.csproj" />
   </ItemGroup>
 
 </Project>

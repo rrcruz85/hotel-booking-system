@@ -1,10 +1,7 @@
-﻿using Hotel.Booking.Common.Contract.DataAccess;
-using System;
-using System.Collections.Generic;
-
-namespace Hotel.Management.DataAccess.Entities
+﻿
+namespace Hotel.Management.Model
 {
-    public partial class Room : IEntity
+    public class Room
     {
         public int Id { get; set; }
         public string Number { get; set; } = null!;
@@ -15,6 +12,5 @@ namespace Hotel.Management.DataAccess.Entities
         public int MaxCapacity { get; set; }
         public int Status { get; set; }
         public decimal CurrentPrice { get; set; }
-        public virtual Hotel Hotel { get; set; } = null!;
     }
 }

@@ -3,9 +3,9 @@ using Hotel.Management.DataAccess.Interfaces;
 
 namespace Hotel.Management.DataAccess.Repositories
 {
-    public class CityRepository : GenericRepository<Entities.City>, ICityRepository
+    public class HotelRepository : GenericRepository<Entities.Hotel>, IHotelRepository
     {
-        public CityRepository(HotelManagementContext context): base(context)
+        public HotelRepository(HotelManagementContext context): base(context)
         {
         }
     }

@@ -1,4 +1,4 @@
-﻿using Hotel.Booking.Contract.DataAccess;
+﻿using Hotel.Booking.Common.Contract.DataAccess;
 
 namespace Hotel.Management.DataAccess.Entities
 {

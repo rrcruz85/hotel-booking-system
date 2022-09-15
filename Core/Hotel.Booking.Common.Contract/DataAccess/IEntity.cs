@@ -1,5 +1,5 @@
 ﻿
-namespace Hotel.Booking.Contract.DataAccess
+namespace Hotel.Booking.Common.Contract.DataAccess
 {
     public interface IEntity
     {

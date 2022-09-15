@@ -1,6 +1,4 @@
-﻿using Hotel.Booking.Contract.DataAccess;
-using System;
-using System.Collections.Generic;
+﻿using Hotel.Booking.Common.Contract.DataAccess;
 
 namespace Hotel.Management.DataAccess.Entities
 {

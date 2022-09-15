@@ -1,8 +1,8 @@
-﻿using Hotel.Booking.Contract.DataAccess;
+﻿using Hotel.Booking.Common.Contract.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Hotel.Booking.Contract.Impl
+namespace Hotel.Booking.Common.Contract.EfImpl
 {
     public class GenericRepository<TEFEntity> : IRepository<TEFEntity>, IDisposable
        where TEFEntity : class, IEntity, new()
@@ -54,32 +54,32 @@ namespace Hotel.Booking.Contract.Impl
             return DbSet.AsNoTracking().Where(predicate);
         }
 
-        public TEFEntity SingleOrDefault(Expression<Func<TEFEntity, bool>> predicate)
+        public TEFEntity? SingleOrDefault(Expression<Func<TEFEntity, bool>> predicate)
         {
             return DbSet.AsNoTracking().SingleOrDefault(predicate);
         }
 
-        public Task<TEFEntity> SingleOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate)
+        public Task<TEFEntity?> SingleOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate)
         {
             return DbSet.AsNoTracking().SingleOrDefaultAsync(predicate);
         }
 
-        public Task<TEFEntity> SingleOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate)
+        public Task<TEFEntity?> SingleOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate)
         {
             return DbSet.SingleOrDefaultAsync(predicate);
         }
 
-        public Task<TEFEntity> FirstOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate)
+        public Task<TEFEntity?> FirstOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate)
         {
             return DbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<TEFEntity> FirstOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate)
+        public async Task<TEFEntity?> FirstOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate)
         {
             return await DbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public Task<TEFEntity> SingleOrDefaultEagerWithChildrenWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate, params Expression<Func<TEFEntity, object>>[] includeExpressions)
+        public Task<TEFEntity?> SingleOrDefaultEagerWithChildrenWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate, params Expression<Func<TEFEntity, object>>[] includeExpressions)
         {
             IQueryable<TEFEntity> set = DbSet;
             foreach (var includeExpression in includeExpressions)

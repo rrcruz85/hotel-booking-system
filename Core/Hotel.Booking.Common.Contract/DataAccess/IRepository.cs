@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Hotel.Booking.Contract.DataAccess
+namespace Hotel.Booking.Common.Contract.DataAccess
 {
     public interface IRepository<TEFEntity> : IDisposable
     {
@@ -9,12 +9,12 @@ namespace Hotel.Booking.Contract.DataAccess
         void Update(TEFEntity model);
         List<TEFEntity> Where(Expression<Func<TEFEntity, bool>> predicate);
         IQueryable<TEFEntity> WhereQueryable(Expression<Func<TEFEntity, bool>> predicate);
-        TEFEntity SingleOrDefault(Expression<Func<TEFEntity, bool>> predicate);
-        Task<TEFEntity> SingleOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate);
-        Task<TEFEntity> SingleOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate);
-        Task<TEFEntity> FirstOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate);
-        Task<TEFEntity> FirstOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate);     
-        Task<TEFEntity> SingleOrDefaultEagerWithChildrenWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate, params Expression<Func<TEFEntity, object>>[] includeExpressions);
+        TEFEntity? SingleOrDefault(Expression<Func<TEFEntity, bool>> predicate);
+        Task<TEFEntity?> SingleOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate);
+        Task<TEFEntity?> SingleOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate);
+        Task<TEFEntity?> FirstOrDefaultAsync(Expression<Func<TEFEntity, bool>> predicate);
+        Task<TEFEntity?> FirstOrDefaultWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate);     
+        Task<TEFEntity?> SingleOrDefaultEagerWithChildrenWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate, params Expression<Func<TEFEntity, object>>[] includeExpressions);
         Task<List<TEFEntity>> WhereAsync(Expression<Func<TEFEntity, bool>> predicate);       
         Task<List<TEFEntity>> WhereWithTrackingAsync(Expression<Func<TEFEntity, bool>> predicate);       
         Task<bool> AnyAsync(Expression<Func<TEFEntity, bool>> predicate);

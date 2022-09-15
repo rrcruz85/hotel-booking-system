@@ -2,7 +2,7 @@
 
 namespace Hotel.Management.DataAccess.Interfaces
 {
-    public interface ICityRepository : IRepository<Entities.City>
+    public interface IRoomRepository : IRepository<Entities.Room>
     {
 
     }
