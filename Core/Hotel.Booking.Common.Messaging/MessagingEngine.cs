@@ -1,28 +1,37 @@
 ﻿
+using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Messasing;
 using System.Text.Json;
 
 namespace Hotel.Booking.Common.Messaging
 {
-    public static class MessagingEngine
+    public class MessagingEngine : IMessagingEngine
     {
-        public static async Task PublishEventMessageAsync<T>(string topic, int eventType, T payload)
+        private readonly IMessagingBroker _messagingBroker;
+
+        public MessagingEngine(IMessagingBroker messagingBroker)
         {
-            var @event = new EventMessage<T>
-            {
-                EventType = eventType,
-                Payload = payload
-            };
-            await ServiceBusMessagingBroker.SendMessageAsync(topic, JsonSerializer.Serialize(@event));
+            _messagingBroker = messagingBroker;
         }
-        
-        public static async Task SheduledEventMessageMessageAsync<T>(string topic, int eventType, T payload, DateTimeOffset scheduleTime)
+
+        public async Task PublishEventMessageAsync<T>(string queueOrTopicName, int eventType, T payload)
         {
             var @event = new EventMessage<T>
             {
                 EventType = eventType,
                 Payload = payload
             };
-            await ServiceBusMessagingBroker.SendSheduledMessageAsync(topic, JsonSerializer.Serialize(@event), scheduleTime);
+            await _messagingBroker.SendMessageAsync(queueOrTopicName, JsonSerializer.Serialize(@event));
+        }
+
+        public async Task SheduledEventMessageMessageAsync<T>(string queueOrTopicName, int eventType, T payload, DateTimeOffset scheduleTime)
+        {
+            var @event = new EventMessage<T>
+            {
+                EventType = eventType,
+                Payload = payload
+            };
+            await _messagingBroker.SendSheduledMessageAsync(queueOrTopicName, JsonSerializer.Serialize(@event), scheduleTime);
         }
     }
 }

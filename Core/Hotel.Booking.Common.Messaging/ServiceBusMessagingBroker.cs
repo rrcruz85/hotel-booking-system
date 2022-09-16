@@ -1,23 +1,29 @@
 ﻿using Azure.Messaging.ServiceBus;
-using Hotel.Booking.Common.Utility;
+using Hotel.Booking.Common.Contract.Messasing;
+using Microsoft.Extensions.Configuration;
 
 namespace Hotel.Booking.Common.Messaging
 {
-    internal static class ServiceBusMessagingBroker
+    public class ServiceBusMessagingBroker : IMessagingBroker
     {
-        private static readonly string ServiceBusConnectionString = Configuration.AppSettings("EventMessageConnectionString");
+        private readonly IConfiguration _config;
 
-        public static async Task SendMessageAsync(string topicName, string message)
+        public ServiceBusMessagingBroker(IConfiguration config)
         {
-            await using var client = new ServiceBusClient(ServiceBusConnectionString);
+            _config = config;
+        }
+
+        public async Task SendMessageAsync(string topicName, string message)
+        {
+            await using var client = new ServiceBusClient(_config["EventMessageConnectionString"]);
             var sender = client.CreateSender(topicName);
             var serviceBusMessage = new ServiceBusMessage(message);
             await sender.SendMessageAsync(serviceBusMessage);
         }
 
-        public static async Task SendMessageAsync(string topicName, string message, IDictionary<string, object> messageProperties)
+        public async Task SendMessageAsync(string topicName, string message, IDictionary<string, object> messageProperties)
         {
-            await using var client = new ServiceBusClient(ServiceBusConnectionString);
+            await using var client = new ServiceBusClient(_config["EventMessageConnectionString"]);
             var sender = client.CreateSender(topicName);
             var serviceBusMessage = new ServiceBusMessage(message);
 
@@ -30,10 +36,10 @@ namespace Hotel.Booking.Common.Messaging
             }
             await sender.SendMessageAsync(serviceBusMessage);
         }
-        
-        public static async Task<long> SendSheduledMessageAsync(string topicName, string message, DateTimeOffset sheduledEnqueueTime)
+
+        public async Task<long> SendSheduledMessageAsync(string topicName, string message, DateTimeOffset sheduledEnqueueTime)
         {
-            await using var client = new ServiceBusClient(ServiceBusConnectionString);
+            await using var client = new ServiceBusClient(_config["EventMessageConnectionString"]);
             var sender = client.CreateSender(topicName);
             var serviceBusMessage = new ServiceBusMessage(message);
             return await sender.ScheduleMessageAsync(serviceBusMessage, sheduledEnqueueTime);
