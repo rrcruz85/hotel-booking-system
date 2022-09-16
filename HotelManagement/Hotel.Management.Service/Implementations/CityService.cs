@@ -1,5 +1,6 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Messaging;
+using Hotel.Booking.Common.Utility;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
@@ -10,15 +11,21 @@ namespace Hotel.Management.Service.Implementations
     public class CityService : ICityService
     {
         private readonly ICityRepository _cityRepository;
-        private readonly string CITY_TOPIC = "CityEvents";
+        private readonly string CITY_TOPIC;
 
         public CityService(ICityRepository cityRepository)
         {
             _cityRepository = cityRepository;
+            CITY_TOPIC = Configuration.AppSettings("CityTopic");
         }
 
         public async Task<int> CreateCityAsync(City city)
         {
+            if (await _cityRepository.AnyAsync(c => c.Name == city.Name && c.State == city.Name && c.Country == city.Country))
+            {
+                throw new ArgumentException($"City name can not be duplicated");
+            }
+
             var cityId = await _cityRepository.AddAsync(city.ToNewEntity());
             city.Id = cityId;
             await MessagingEngine.PublishEventMessageAsync(CITY_TOPIC, (int)CityEventType.Created, city);
@@ -66,6 +73,10 @@ namespace Hotel.Management.Service.Implementations
             if (entity == null)
             {
                 throw new ArgumentException($"City {city.Id} does not exist");
+            }
+            if (await _cityRepository.AnyAsync(c => c.Id != city.Id && c.Name == city.Name && c.State == city.Name && c.Country == city.Country))
+            {
+                throw new ArgumentException($"City name can not be duplicated");
             }
             await _cityRepository.UpdateAsync(city.ToEntity());
             await MessagingEngine.PublishEventMessageAsync(CITY_TOPIC, (int)CityEventType.Updated, city);
