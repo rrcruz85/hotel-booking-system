@@ -1,6 +1,5 @@
 ﻿
 using Hotel.Booking.Common.Contract.Messaging;
-using Hotel.Booking.Common.Contract.Messasing;
 using System.Text.Json;
 
 namespace Hotel.Booking.Common.Messaging

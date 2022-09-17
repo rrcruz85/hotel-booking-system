@@ -1,7 +1,6 @@
-﻿
-namespace Hotel.Booking.Common.Messaging
+﻿namespace Hotel.Booking.Common.Contract.Messaging
 {
-    internal sealed class EventMessage<T>
+    public sealed class EventMessage<T>
     {
         public T? Payload { get; set; }
         public int EventType { get; set; }

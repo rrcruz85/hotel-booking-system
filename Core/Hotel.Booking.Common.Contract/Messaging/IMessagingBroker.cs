@@ -1,5 +1,5 @@
 ﻿
-namespace Hotel.Booking.Common.Contract.Messasing
+namespace Hotel.Booking.Common.Contract.Messaging
 {
     public interface IMessagingBroker
     {

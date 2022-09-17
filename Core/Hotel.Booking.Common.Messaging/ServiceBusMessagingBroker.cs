@@ -1,5 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
-using Hotel.Booking.Common.Contract.Messasing;
+using Hotel.Booking.Common.Contract.Messaging;
 using Microsoft.Extensions.Configuration;
 
 namespace Hotel.Booking.Common.Messaging

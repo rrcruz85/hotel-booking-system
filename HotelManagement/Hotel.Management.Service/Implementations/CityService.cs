@@ -13,6 +13,7 @@ namespace Hotel.Management.Service.Implementations
         private readonly ICityRepository _cityRepository;
         private readonly IMessagingEngine _messagingEngine;
         private readonly IConfiguration _config;
+        private readonly string TopicName = "CityTopicName";
 
         public CityService(ICityRepository cityRepository, IMessagingEngine messagingEngine, IConfiguration config)
         {
@@ -30,7 +31,7 @@ namespace Hotel.Management.Service.Implementations
 
             var cityId = await _cityRepository.AddAsync(city.ToNewEntity());
             city.Id = cityId;
-            await _messagingEngine.PublishEventMessageAsync(_config["CityTopicName"], (int)CityEventType.Created, city);
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)CityEventType.Created, city);
             return cityId;
         }
 
@@ -42,7 +43,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"City {cityId} does not exist");
             }
             await _cityRepository.DeleteAsync(city);
-            await _messagingEngine.PublishEventMessageAsync(_config["CityTopicName"], (int)CityEventType.Deleted, cityId);
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)CityEventType.Deleted, cityId);
         }
 
         public async Task<List<City>> GetCitiesByCountryAsync(string country)
@@ -81,7 +82,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"City name can not be duplicated");
             }
             await _cityRepository.UpdateAsync(city.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config["CityTopicName"], (int)CityEventType.Updated, city);
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)CityEventType.Updated, city);
         }
     }
 }

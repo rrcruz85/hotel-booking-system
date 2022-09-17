@@ -16,16 +16,16 @@ namespace Hotel.Management.DataAccess
         {
         }
 
-        //public virtual DbSet<City> Cities { get; set; } = null!;
-        //public virtual DbSet<Entities.Hotel> Hotels { get; set; } = null!;
-        //public virtual DbSet<HotelCategory> HotelCategories { get; set; } = null!;
-        //public virtual DbSet<HotelContactInfo> HotelContactInfos { get; set; } = null!;
-        //public virtual DbSet<HotelFacility> HotelFacilities { get; set; } = null!;
-        //public virtual DbSet<HotelGallery> HotelGalleries { get; set; } = null!;
-        //public virtual DbSet<HotelService> HotelServices { get; set; } = null!;
-        //public virtual DbSet<Location> Locations { get; set; } = null!;
-        //public virtual DbSet<Room> Rooms { get; set; } = null!;
-        
+        public virtual DbSet<City> Cities { get; set; } = null!;
+        public virtual DbSet<Entities.Hotel> Hotels { get; set; } = null!;
+        public virtual DbSet<HotelCategory> HotelCategories { get; set; } = null!;
+        public virtual DbSet<HotelContactInfo> HotelContactInfos { get; set; } = null!;
+        public virtual DbSet<HotelFacility> HotelFacilities { get; set; } = null!;
+        public virtual DbSet<HotelGallery> HotelGalleries { get; set; } = null!;
+        public virtual DbSet<HotelService> HotelServices { get; set; } = null!;
+        public virtual DbSet<Location> Locations { get; set; } = null!;
+        public virtual DbSet<Room> Rooms { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<City>(entity =>
