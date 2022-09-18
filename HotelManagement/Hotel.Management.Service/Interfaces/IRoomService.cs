@@ -1,6 +1,4 @@
 ﻿
-using System.Linq.Expressions;
-
 namespace Hotel.Management.Service.Interfaces
 {
     public interface IRoomService
@@ -12,7 +10,6 @@ namespace Hotel.Management.Service.Interfaces
         Task<Model.Room?> GetRoomByAsync(int roomId);
         Task<List<Model.Room>> GetAllRoomsByHotelIdAsync(int hotelId);
         Task<Model.Room?> GetRoomByNumberAsync(int hotelId, string number);
-        Task<List<Model.Room>> GetRoomsByStatusAndHotelAsync(int status, DateTime startDate, DateTime endDate, int? hotelId);
-        Task<List<Model.Room>> GetRoomsByCriteriaAsync(Expression<Func<Model.Room, bool>> filter);
+        Task<List<Model.Room>> GetRoomsByStatusAndHotelAsync(int hotelId, int status);       
     }
 }

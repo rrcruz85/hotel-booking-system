@@ -5,7 +5,6 @@ using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
 using Microsoft.Extensions.Configuration;
-using System.Linq.Expressions;
 
 namespace Hotel.Management.Service.Implementations
 {
@@ -29,10 +28,11 @@ namespace Hotel.Management.Service.Implementations
             {
                 throw new ArgumentException($"Room number can not be duplicated");
             }
-
-            var roomId = await _roomRepository.AddAsync(room.ToNewEntity());
-            room.Id = roomId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)RoomEventType.Created, room);
+            var newEntity = room.ToNewEntity();
+            newEntity.Status = (int)RoomStatus.Available;
+            var roomId = await _roomRepository.AddAsync(newEntity);
+            newEntity.Id = roomId;
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)RoomEventType.Created, newEntity);
             return roomId;
         }
 
@@ -59,20 +59,15 @@ namespace Hotel.Management.Service.Implementations
             return room?.ToModel();
         }
 
-        public Task<List<Room>> GetRoomsByCriteriaAsync(Expression<Func<Room, bool>> filter)
-        {
-            return null;
-        }
-
         public async Task<Room?> GetRoomByNumberAsync(int hotelId, string number)
         {
             var room = await _roomRepository.SingleOrDefaultAsync(r => r.HotelId == hotelId && r.Number == number);
             return room?.ToModel();
         }
 
-        public async Task<List<Room>> GetRoomsByStatusAndHotelAsync(int status, DateTime startDate, DateTime endDate, int? hotelId)
+        public async Task<List<Room>> GetRoomsByStatusAndHotelAsync(int hotelId, int status)
         {
-            var rooms = await _roomRepository.WhereAsync(r => r.Status == status && (!hotelId.HasValue || r.HotelId == hotelId.Value));
+            var rooms = await _roomRepository.WhereAsync(r => r.Status == status && r.HotelId == hotelId);
             return rooms.Select(r => r.ToModel()).OrderBy(r => r.Number).ToList();
         }        
 

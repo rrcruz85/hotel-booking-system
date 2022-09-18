@@ -21,4 +21,7 @@ System consist of 3 main Microservices:
 2. Reservation Management
 3. User Accounts Management
 ## Architecture High Level Diagram:
-![alt text](architecture-overview.svg)
+![alt text](architecture-overview.png)
+
+## Data Model Diagram:
+![alt text](data-model.png)
