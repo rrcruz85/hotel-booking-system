@@ -16,12 +16,29 @@ and can’t be reserved more than 30 days in advance
 
 ## Architecture Overview:
 In order to fulfill all requirements it was designed an event driven arquitecture decoupled into several microservices so each of them can be scaled up on demand independently. By using load balancers in front of each of the App Servers that will host the rest web apis services, high availability should be guarantied. When traffic increases IT Departament can set up rules to scale up each of the App Services automatically and if this is not enough they can scale the app up by adding new App Server instances.   
-System consist of 3 main Microservices:
-1. Hotel Management
+System consist of 3 main microservices:
+1. Hotel Management 
 2. Reservation Management
 3. User Accounts Management
+
+Each of these microservices is a rest webapi app built following a layered architecture pattern where at least you can detect 3 basic layers:
+1. DataAccess
+2. Services
+3. Application
+
+In order to communicate microservices between themselves and keeping data consistency in each of the microservice databases, a publish/subscriber messagging pattern was implemented by using Azure Service Bus as messaging broker system with topics where event messages are sent and Azure Functions acting as topic subscribers to process events. For image storage Azure Blob Storage was implemented.
+
 ## Architecture High Level Diagram:
 ![alt text](architecture-overview.png)
 
 ## Data Model Diagram:
 ![alt text](data-model.png)
+
+## Tech Stack:
+1. C# & .Net6
+2. From Azure Cloud: 
+   - Azure Service Bus
+   - Azure Functions
+   - Azure Blob Storage
+   - Azure Sql DB
+   - Azure Load Balancer & Azure App Server
