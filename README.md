@@ -17,9 +17,12 @@ and can’t be reserved more than 30 days in advance
 ## Architecture Overview:
 In order to fulfill all requirements it was designed an event driven arquitecture decoupled into several microservices so each of them can be scaled up on demand independently. By using load balancers in front of each of the App Servers that will host the rest web apis services, high availability should be guarantied. When traffic increases IT Departament can set up rules to scale up each of the App Services automatically and if this is not enough they can scale the app up by adding new App Server instances.   
 System consist of 3 main microservices:
-1. Hotel Management 
-2. Reservation Management
+1. Hotel Management:
+   - Meant to be mainly used by hotel manager users to create, update and delete  hotels, rooms and other info related to services, facilities as well.  
+2. Reservation Management:
+   - Can be considered as the heart of the system because it is the one in charge to provide all the services to allow searching hotels, room's availability and to manage reservations.
 3. User Accounts Management
+   - All the user's info and user profile's data is managed by this subsystem.
 
 Each of these microservices is a rest webapi app built following a layered architecture pattern where at least you can detect 3 basic layers:
 1. DataAccess
