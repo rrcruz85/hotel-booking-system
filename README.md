@@ -36,7 +36,10 @@ In order to communicate microservices between themselves and keeping data consis
 
 ## Tech Stack:
 1. C# & .Net6
-2. From Azure Cloud: 
+2. ASP.Net Core Web API
+3. EntityFramework Core
+4. OpenAPI/Swagger
+5. From Azure Cloud: 
    - Azure Service Bus
    - Azure Functions
    - Azure Blob Storage
