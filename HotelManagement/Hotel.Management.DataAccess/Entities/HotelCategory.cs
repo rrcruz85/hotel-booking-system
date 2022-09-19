@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 namespace Hotel.Management.DataAccess.Entities
 {
-    public partial class HotelCategory : IEntity
+    public partial class HotelCategory: IEntity
     {
         public HotelCategory()
         {
-            Hotels = new HashSet<Hotel>();
+            HotelCategoryRelations = new HashSet<HotelCategoryRelation>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
 
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public virtual ICollection<HotelCategoryRelation> HotelCategoryRelations { get; set; }
     }
 }

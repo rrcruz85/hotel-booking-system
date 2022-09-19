@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Booking.Common.Messag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Booking.Common.Utility", "Core\Hotel.Booking.Common.Utility\Hotel.Booking.Common.Utility.csproj", "{93529889-6A6C-4C3E-BE51-382CB11EA245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Management.Event.Processor", "HotelManagement\Hotel.Management.Event.Processor\Hotel.Management.Event.Processor.csproj", "{6158753A-59EA-4FC7-8D5B-63992F5DCBB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.Event.Processor", "HotelManagement\Hotel.Management.Event.Processor\Hotel.Management.Event.Processor.csproj", "{6158753A-59EA-4FC7-8D5B-63992F5DCBB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Booking.Common.Service", "Core\Hotel.Booking.Common.Service\Hotel.Booking.Common.Service.csproj", "{EBF9B7DF-482C-4881-A30E-F7BF061100D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{6158753A-59EA-4FC7-8D5B-63992F5DCBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6158753A-59EA-4FC7-8D5B-63992F5DCBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6158753A-59EA-4FC7-8D5B-63992F5DCBB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +98,7 @@ Global
 		{E0F26D7A-AC3F-46E3-98C9-83577E9B5319} = {FADF78F5-82D1-4523-A34C-63C714C13949}
 		{93529889-6A6C-4C3E-BE51-382CB11EA245} = {FADF78F5-82D1-4523-A34C-63C714C13949}
 		{6158753A-59EA-4FC7-8D5B-63992F5DCBB1} = {B61F2E8A-165E-45A2-A250-840FBC16CBE1}
+		{EBF9B7DF-482C-4881-A30E-F7BF061100D9} = {FADF78F5-82D1-4523-A34C-63C714C13949}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B80A5646-3DA3-4AA8-B85E-D50493CE1F9D}

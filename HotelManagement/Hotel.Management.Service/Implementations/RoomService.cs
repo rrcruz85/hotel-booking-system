@@ -15,7 +15,10 @@ namespace Hotel.Management.Service.Implementations
         private readonly IConfiguration _config;
         private readonly string TopicName = "RoomTopicName";
 
-        public RoomService(IRoomRepository roomRepository, IMessagingEngine messagingEngine, IConfiguration config)
+        public RoomService(
+            IRoomRepository roomRepository, 
+            IMessagingEngine messagingEngine, 
+            IConfiguration config)
         {
             _roomRepository = roomRepository;
             _messagingEngine = messagingEngine;
@@ -59,7 +62,7 @@ namespace Hotel.Management.Service.Implementations
             return room?.ToModel();
         }
 
-        public async Task<Room?> GetRoomByNumberAsync(int hotelId, string number)
+        public async Task<Room?> GetRoomByNumberAsync(int hotelId, int number)
         {
             var room = await _roomRepository.SingleOrDefaultAsync(r => r.HotelId == hotelId && r.Number == number);
             return room?.ToModel();

@@ -10,12 +10,12 @@ namespace Hotel.Management.DataAccess.Extensions
         {
             service.AddScoped<ICityRepository, CityRepository>();
             service.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
+            service.AddScoped<IHotelCategoryRelationRepository, HotelCategoryRelationRepository>();
             service.AddScoped<IHotelContactInfoRepository, HotelContactInfoRepository>();
             service.AddScoped<IHotelFacilityRepository, HotelFacilityRepository>();
             service.AddScoped<IHotelGalleryRepository, HotelGalleryRepository>();
             service.AddScoped<IHotelRepository, HotelRepository>();
             service.AddScoped<IHotelServiceRepository, HotelServiceRepository>();
-            service.AddScoped<ILocationRepository, LocationRepository>();
             service.AddScoped<IRoomRepository, RoomRepository>();
         }
     }   

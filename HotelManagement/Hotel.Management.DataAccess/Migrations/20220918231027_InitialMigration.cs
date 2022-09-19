@@ -4,7 +4,7 @@
 
 namespace Hotel.Management.DataAccess.Migrations
 {
-    public partial class MyFirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,9 +14,9 @@ namespace Hotel.Management.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    State = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    Country = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
+                    State = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
+                    Country = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,50 +37,48 @@ namespace Hotel.Management.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Hotel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
                     AddressLine1 = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     AddressLine2 = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    Zip = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
+                    Zip = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     GeoLocation = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Hotel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_City",
+                        name: "FK_Hotel_City",
                         column: x => x.CityId,
                         principalTable: "City",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hotel",
+                name: "HotelCategoryRelation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    HotelId = table.Column<int>(type: "int", nullable: false),
+                    HotelCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hotel", x => x.Id);
+                    table.PrimaryKey("PK_HotelCategoryRelation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Category",
-                        column: x => x.CategoryId,
-                        principalTable: "HotelCategory",
+                        name: "FK_HotelCategoryRelation_Hotel",
+                        column: x => x.HotelId,
+                        principalTable: "Hotel",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Location",
-                        column: x => x.LocationId,
-                        principalTable: "Location",
+                        name: "FK_HotelCategoryRelation_HotelCategory",
+                        column: x => x.HotelCategoryId,
+                        principalTable: "HotelCategory",
                         principalColumn: "Id");
                 });
 
@@ -90,7 +88,7 @@ namespace Hotel.Management.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(type: "int", nullable: false, comment: "possible values are: email (1), mobile (2), phone (3), website (4), social network (5)"),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
                     HotelId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -172,22 +170,20 @@ namespace Hotel.Management.DataAccess.Migrations
                 name: "Room",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<string>(type: "varchar(32)", unicode: false, maxLength: 32, nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     HotelId = table.Column<int>(type: "int", nullable: false),
-                    Floor = table.Column<int>(type: "int", nullable: true),
-                    Extension = table.Column<string>(type: "varchar(16)", unicode: false, maxLength: 16, nullable: true),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    MaxCapacity = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    CurrentPrice = table.Column<decimal>(type: "money", nullable: false)
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    MaxCapacity = table.Column<int>(type: "int", nullable: false),
+                    CurrentPrice = table.Column<decimal>(type: "money", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Floor = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Room", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Hotel_Room",
+                        name: "FK_Room_Hotel",
                         column: x => x.HotelId,
                         principalTable: "Hotel",
                         principalColumn: "Id",
@@ -195,14 +191,19 @@ namespace Hotel.Management.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hotel_CategoryId",
+                name: "IX_Hotel_CityId",
                 table: "Hotel",
-                column: "CategoryId");
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hotel_LocationId",
-                table: "Hotel",
-                column: "LocationId");
+                name: "IX_HotelCategoryRelation_HotelCategoryId",
+                table: "HotelCategoryRelation",
+                column: "HotelCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HotelCategoryRelation_HotelId",
+                table: "HotelCategoryRelation",
+                column: "HotelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HotelContactInfo_HotelId",
@@ -225,11 +226,6 @@ namespace Hotel.Management.DataAccess.Migrations
                 column: "HotelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Location_CityId",
-                table: "Location",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Room_HotelId",
                 table: "Room",
                 column: "HotelId");
@@ -237,6 +233,9 @@ namespace Hotel.Management.DataAccess.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "HotelCategoryRelation");
+
             migrationBuilder.DropTable(
                 name: "HotelContactInfo");
 
@@ -253,13 +252,10 @@ namespace Hotel.Management.DataAccess.Migrations
                 name: "Room");
 
             migrationBuilder.DropTable(
-                name: "Hotel");
-
-            migrationBuilder.DropTable(
                 name: "HotelCategory");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Hotel");
 
             migrationBuilder.DropTable(
                 name: "City");

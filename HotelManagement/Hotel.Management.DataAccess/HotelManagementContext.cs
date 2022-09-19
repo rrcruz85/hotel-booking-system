@@ -12,18 +12,19 @@ namespace Hotel.Management.DataAccess
         {
         }
 
-        public HotelManagementContext(DbContextOptions<HotelManagementContext> options) : base(options)
+        public HotelManagementContext(DbContextOptions<HotelManagementContext> options)
+            : base(options)
         {
         }
 
         public virtual DbSet<City> Cities { get; set; } = null!;
         public virtual DbSet<Entities.Hotel> Hotels { get; set; } = null!;
         public virtual DbSet<HotelCategory> HotelCategories { get; set; } = null!;
+        public virtual DbSet<HotelCategoryRelation> HotelCategoryRelations { get; set; } = null!;
         public virtual DbSet<HotelContactInfo> HotelContactInfos { get; set; } = null!;
         public virtual DbSet<HotelFacility> HotelFacilities { get; set; } = null!;
         public virtual DbSet<HotelGallery> HotelGalleries { get; set; } = null!;
         public virtual DbSet<HotelService> HotelServices { get; set; } = null!;
-        public virtual DbSet<Location> Locations { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,15 +34,15 @@ namespace Hotel.Management.DataAccess
                 entity.ToTable("City");
 
                 entity.Property(e => e.Country)
-                    .HasMaxLength(100)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(100)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.State)
-                    .HasMaxLength(100)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
             });
 
@@ -49,20 +50,33 @@ namespace Hotel.Management.DataAccess
             {
                 entity.ToTable("Hotel");
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.AddressLine1)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AddressLine2)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GeoLocation)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Hotels)
-                    .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK_Category");
+                entity.Property(e => e.Zip)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
-                entity.HasOne(d => d.Location)
+                entity.HasOne(d => d.City)
                     .WithMany(p => p.Hotels)
-                    .HasForeignKey(d => d.LocationId)
+                    .HasForeignKey(d => d.CityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Location");
+                    .HasConstraintName("FK_Hotel_City");
             });
 
             modelBuilder.Entity<HotelCategory>(entity =>
@@ -80,11 +94,26 @@ namespace Hotel.Management.DataAccess
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<HotelCategoryRelation>(entity =>
+            {
+                entity.ToTable("HotelCategoryRelation");
+
+                entity.HasOne(d => d.HotelCategory)
+                    .WithMany(p => p.HotelCategoryRelations)
+                    .HasForeignKey(d => d.HotelCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HotelCategoryRelation_HotelCategory");
+
+                entity.HasOne(d => d.Hotel)
+                    .WithMany(p => p.HotelCategoryRelations)
+                    .HasForeignKey(d => d.HotelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HotelCategoryRelation_Hotel");
+            });
+
             modelBuilder.Entity<HotelContactInfo>(entity =>
             {
                 entity.ToTable("HotelContactInfo");
-
-                entity.Property(e => e.Type).HasComment("possible values are: email (1), mobile (2), phone (3), website (4), social network (5)");
 
                 entity.Property(e => e.Value)
                     .HasMaxLength(250)
@@ -150,50 +179,18 @@ namespace Hotel.Management.DataAccess
                     .HasConstraintName("FK_HotelService_Hotel");
             });
 
-            modelBuilder.Entity<Location>(entity =>
-            {
-                entity.ToTable("Location");
-
-                entity.Property(e => e.AddressLine1)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.AddressLine2)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.GeoLocation)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Zip)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.City)
-                    .WithMany(p => p.Locations)
-                    .HasForeignKey(d => d.CityId)
-                    .HasConstraintName("FK_City");
-            });
-
             modelBuilder.Entity<Room>(entity =>
             {
                 entity.ToTable("Room");
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.CurrentPrice).HasColumnType("money");
-
-                entity.Property(e => e.Extension)
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Number)
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
-                    .HasConstraintName("FK_Hotel_Room");
+                    .HasConstraintName("FK_Room_Hotel");
             });
 
             OnModelCreatingPartial(modelBuilder);

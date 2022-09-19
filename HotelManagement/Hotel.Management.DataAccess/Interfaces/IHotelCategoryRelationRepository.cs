@@ -2,7 +2,7 @@
 
 namespace Hotel.Management.DataAccess.Interfaces
 {
-    public interface ILocationRepository : IRepository<Entities.Location>
+    public interface IHotelCategoryRelationRepository : IRepository<Entities.HotelCategoryRelation>
     {
 
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Hotel.Management.DataAccess.Entities
 {
-    public partial class HotelFacility : IEntity
+    public partial class HotelFacility: IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

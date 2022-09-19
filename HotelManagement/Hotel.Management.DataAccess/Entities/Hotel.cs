@@ -1,11 +1,14 @@
 ﻿using Hotel.Booking.Common.Contract.DataAccess;
+using System;
+using System.Collections.Generic;
 
 namespace Hotel.Management.DataAccess.Entities
 {
-    public partial class Hotel : IEntity
+    public partial class Hotel: IEntity
     {
         public Hotel()
         {
+            HotelCategoryRelations = new HashSet<HotelCategoryRelation>();
             HotelContactInfos = new HashSet<HotelContactInfo>();
             HotelFacilities = new HashSet<HotelFacility>();
             HotelGalleries = new HashSet<HotelGallery>();
@@ -15,11 +18,14 @@ namespace Hotel.Management.DataAccess.Entities
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int LocationId { get; set; }
-        public int? CategoryId { get; set; }
+        public string AddressLine1 { get; set; } = null!;
+        public string? AddressLine2 { get; set; }
+        public string? Zip { get; set; }
+        public int CityId { get; set; }
+        public string? GeoLocation { get; set; }
 
-        public virtual HotelCategory? Category { get; set; }
-        public virtual Location Location { get; set; } = null!;
+        public virtual City City { get; set; } = null!;
+        public virtual ICollection<HotelCategoryRelation> HotelCategoryRelations { get; set; }
         public virtual ICollection<HotelContactInfo> HotelContactInfos { get; set; }
         public virtual ICollection<HotelFacility> HotelFacilities { get; set; }
         public virtual ICollection<HotelGallery> HotelGalleries { get; set; }

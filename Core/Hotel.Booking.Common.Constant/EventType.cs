@@ -8,6 +8,40 @@ namespace Hotel.Booking.Common.Constant
         Deleted
     }
 
+    public enum HotelCategoryEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum HotelCategoryRelationEventType
+    {
+        Created = 1,
+        Deleted
+    }
+
+    public enum HotelContactInfoEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum HotelFacilityEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum HotelServiceEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
     public enum HotelEventType
     {
         Created = 1,

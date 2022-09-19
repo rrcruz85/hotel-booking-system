@@ -11,8 +11,7 @@ namespace Hotel.Management.Service.Translators
                HotelId = room.HotelId,
                Number = room.Number,
                Floor = room.Floor,
-               CurrentPrice = room.CurrentPrice,
-               Extension = room.Extension,
+               CurrentPrice = room.CurrentPrice,              
                MaxCapacity = room.MaxCapacity,
                Status = room.Status,
                Type = room.Type
@@ -30,8 +29,7 @@ namespace Hotel.Management.Service.Translators
         {
             return new Model.Room
             {
-               CurrentPrice = room.CurrentPrice,
-               Extension = room.Extension,
+               CurrentPrice = room.CurrentPrice,               
                Floor = room.Floor,
                HotelId = room.HotelId,
                Id = room.Id,

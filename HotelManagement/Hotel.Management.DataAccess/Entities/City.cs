@@ -6,7 +6,7 @@ namespace Hotel.Management.DataAccess.Entities
     {
         public City()
         {
-            Locations = new HashSet<Location>();
+            Hotels = new HashSet<Hotel>();
         }
 
         public int Id { get; set; }
@@ -14,6 +14,6 @@ namespace Hotel.Management.DataAccess.Entities
         public string State { get; set; } = null!;
         public string Country { get; set; } = null!;
 
-        public virtual ICollection<Location> Locations { get; set; }
+        public virtual ICollection<Hotel> Hotels { get; set; }
     }
 }

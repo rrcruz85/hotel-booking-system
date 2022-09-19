@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Management.DataAccess.Migrations
 {
     [DbContext(typeof(HotelManagementContext))]
-    [Migration("20220914051055_MyFirstMigration")]
-    partial class MyFirstMigration
+    [Migration("20220918231027_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace Hotel.Management.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.City", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,40 +34,9 @@ namespace Hotel.Management.DataAccess.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(250)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("City", (string)null);
-                });
-
-            modelBuilder.Entity("Hotel.Management.DataAccess.Hotel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -75,16 +44,60 @@ namespace Hotel.Management.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(250)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.ToTable("City", (string)null);
+                });
 
-                    b.HasIndex("LocationId");
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Hotel", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("AddressLine2")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GeoLocation")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("Zip")
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("Hotel", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelCategory", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelCategory", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -105,7 +118,30 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.ToTable("HotelCategory", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelContactInfo", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelCategoryRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("HotelCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HotelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelCategoryId");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("HotelCategoryRelation", (string)null);
+                });
+
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelContactInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,8 +153,7 @@ namespace Hotel.Management.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int")
-                        .HasComment("possible values are: email (1), mobile (2), phone (3), website (4), social network (5)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -133,7 +168,7 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.ToTable("HotelContactInfo", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelFacility", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelFacility", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -162,7 +197,7 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.ToTable("HotelFacility", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelGallery", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelGallery", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,7 +226,7 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.ToTable("HotelGallery", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelService", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelService", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -220,61 +255,13 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.ToTable("HotelService", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.Location", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Room", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AddressLine1")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("AddressLine2")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GeoLocation")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Zip")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Location", (string)null);
-                });
-
-            modelBuilder.Entity("Hotel.Management.DataAccess.Room", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("CurrentPrice")
                         .HasColumnType("money");
-
-                    b.Property<string>("Extension")
-                        .HasMaxLength(16)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(16)");
 
                     b.Property<int?>("Floor")
                         .HasColumnType("int");
@@ -285,11 +272,8 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.Property<int>("MaxCapacity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(32)");
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -304,27 +288,39 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.ToTable("Room", (string)null);
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.Hotel", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Hotel", b =>
                 {
-                    b.HasOne("Hotel.Management.DataAccess.HotelCategory", "Category")
+                    b.HasOne("Hotel.Management.DataAccess.Entities.City", "City")
                         .WithMany("Hotels")
-                        .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK_Category");
-
-                    b.HasOne("Hotel.Management.DataAccess.Location", "Location")
-                        .WithMany("Hotels")
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("CityId")
                         .IsRequired()
-                        .HasConstraintName("FK_Location");
+                        .HasConstraintName("FK_Hotel_City");
 
-                    b.Navigation("Category");
-
-                    b.Navigation("Location");
+                    b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelContactInfo", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelCategoryRelation", b =>
                 {
-                    b.HasOne("Hotel.Management.DataAccess.Hotel", "Hotel")
+                    b.HasOne("Hotel.Management.DataAccess.Entities.HotelCategory", "HotelCategory")
+                        .WithMany("HotelCategoryRelations")
+                        .HasForeignKey("HotelCategoryId")
+                        .IsRequired()
+                        .HasConstraintName("FK_HotelCategoryRelation_HotelCategory");
+
+                    b.HasOne("Hotel.Management.DataAccess.Entities.Hotel", "Hotel")
+                        .WithMany("HotelCategoryRelations")
+                        .HasForeignKey("HotelId")
+                        .IsRequired()
+                        .HasConstraintName("FK_HotelCategoryRelation_Hotel");
+
+                    b.Navigation("Hotel");
+
+                    b.Navigation("HotelCategory");
+                });
+
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelContactInfo", b =>
+                {
+                    b.HasOne("Hotel.Management.DataAccess.Entities.Hotel", "Hotel")
                         .WithMany("HotelContactInfos")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,9 +330,9 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelFacility", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelFacility", b =>
                 {
-                    b.HasOne("Hotel.Management.DataAccess.Hotel", "Hotel")
+                    b.HasOne("Hotel.Management.DataAccess.Entities.Hotel", "Hotel")
                         .WithMany("HotelFacilities")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -346,9 +342,9 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelGallery", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelGallery", b =>
                 {
-                    b.HasOne("Hotel.Management.DataAccess.Hotel", "Hotel")
+                    b.HasOne("Hotel.Management.DataAccess.Entities.Hotel", "Hotel")
                         .WithMany("HotelGalleries")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -358,9 +354,9 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelService", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelService", b =>
                 {
-                    b.HasOne("Hotel.Management.DataAccess.Hotel", "Hotel")
+                    b.HasOne("Hotel.Management.DataAccess.Entities.Hotel", "Hotel")
                         .WithMany("HotelServices")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -370,37 +366,27 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.Location", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Room", b =>
                 {
-                    b.HasOne("Hotel.Management.DataAccess.City", "City")
-                        .WithMany("Locations")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_City");
-
-                    b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Hotel.Management.DataAccess.Room", b =>
-                {
-                    b.HasOne("Hotel.Management.DataAccess.Hotel", "Hotel")
+                    b.HasOne("Hotel.Management.DataAccess.Entities.Hotel", "Hotel")
                         .WithMany("Rooms")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Hotel_Room");
+                        .HasConstraintName("FK_Room_Hotel");
 
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.City", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.City", b =>
                 {
-                    b.Navigation("Locations");
+                    b.Navigation("Hotels");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.Hotel", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Hotel", b =>
                 {
+                    b.Navigation("HotelCategoryRelations");
+
                     b.Navigation("HotelContactInfos");
 
                     b.Navigation("HotelFacilities");
@@ -412,14 +398,9 @@ namespace Hotel.Management.DataAccess.Migrations
                     b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("Hotel.Management.DataAccess.HotelCategory", b =>
+            modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelCategory", b =>
                 {
-                    b.Navigation("Hotels");
-                });
-
-            modelBuilder.Entity("Hotel.Management.DataAccess.Location", b =>
-                {
-                    b.Navigation("Hotels");
+                    b.Navigation("HotelCategoryRelations");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,7 +9,7 @@ namespace Hotel.Management.Service.Interfaces
         Task DeleteRoomAsync(int roomId);
         Task<Model.Room?> GetRoomByAsync(int roomId);
         Task<List<Model.Room>> GetAllRoomsByHotelIdAsync(int hotelId);
-        Task<Model.Room?> GetRoomByNumberAsync(int hotelId, string number);
+        Task<Model.Room?> GetRoomByNumberAsync(int hotelId, int number);
         Task<List<Model.Room>> GetRoomsByStatusAndHotelAsync(int hotelId, int status);       
     }
 }
