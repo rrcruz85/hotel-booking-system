@@ -11,10 +11,6 @@ namespace Reservation.Management.DataAccess
     {
         protected readonly IConfiguration _config;
 
-        public ReservationManagementContext() 
-        {    
-        }
-
         public ReservationManagementContext(IConfiguration config, DbContextOptions<ReservationManagementContext> options): base(options)
         {
             _config = config;

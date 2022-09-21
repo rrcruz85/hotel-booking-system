@@ -16,7 +16,16 @@ namespace Reservation.Management.DataAccess.Extensions
             services.AddScoped<IHotelGalleryRepository, HotelGalleryRepository>();
             services.AddScoped<IHotelRepository, HotelRepository>();
             services.AddScoped<IHotelServiceRepository, HotelServiceRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IReservationHistoryRepository, ReservationHistoryRepository>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomReservationRepository, RoomReservationRepository>();
+            services.AddScoped<IUserContactInfoRepository, UserContactInfoRepository>();
+            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }   
 }
