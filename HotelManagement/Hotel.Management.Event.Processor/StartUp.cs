@@ -1,4 +1,5 @@
-﻿using Hotel.Management.DataAccess.Extensions;
+﻿using Hotel.Management.DataAccess;
+using Hotel.Management.DataAccess.Extensions;
 using Hotel.Management.Event.Processor;
 using Hotel.Management.Event.Processor.Interfaces;
 using Hotel.Management.Event.Processor.Services;
@@ -13,9 +14,10 @@ namespace Hotel.Management.Event.Processor
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddDbContext<HotelManagementContext>();
             builder.Services.AddRepositories();
             builder.Services.AddBusinessServices();
-            builder.Services.AddSingleton<IRoomEventProcessor, RoomEventProcessor>();
+            builder.Services.AddScoped<IRoomEventProcessor, RoomEventProcessor>();
         }
     }
 }

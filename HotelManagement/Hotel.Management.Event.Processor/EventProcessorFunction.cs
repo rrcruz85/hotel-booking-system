@@ -22,7 +22,7 @@ namespace Hotel.Management.Event.Processor
         }
 
         [FunctionName("RoomEventProcessor")]
-        public async Task RoomEventProcessorAsync([ServiceBusTrigger("hotel-booking", "room-events", Connection = "ServiceBusHotelBookingConnectionString")] string @eventMessage)
+        public async Task RoomEventProcessorAsync([ServiceBusTrigger("room-events", "room-event-processor", Connection = "EventMessageConnectionString")] string @eventMessage)
         {
             try
             {
