@@ -10,7 +10,11 @@ namespace Hotel.Management.DataAccess
     public partial class HotelManagementContext : DbContext
     {
         protected readonly IConfiguration _config;
-        
+
+        public HotelManagementContext()
+        {
+        }
+
         public HotelManagementContext(IConfiguration config, DbContextOptions options) : base(options)
         {
             _config = config;
