@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserAccountManagement", "Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.DataAccess", "HotelManagement\Hotel.Management.DataAccess\Hotel.Management.DataAccess.csproj", "{E773855F-4CC7-45AE-9E74-38D087385BB2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.Api", "HotelManagement\Hotel.Management.Api\Hotel.Management.Api.csproj", "{A1DB3698-970F-47C1-8B3D-1262EB29DA5B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Booking.Common.Contract", "Core\Hotel.Booking.Common.Contract\Hotel.Booking.Common.Contract.csproj", "{E0D7C6E9-5BD4-465C-8C71-669BA7E43DDE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Booking.Common.Contract.EfImpl", "Core\Hotel.Booking.Common.Contract.EfImpl\Hotel.Booking.Common.Contract.EfImpl.csproj", "{21270C3E-D854-4240-B11C-A6A084D1879D}"
@@ -31,7 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Booking.Common.Utilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.Event.Processor", "HotelManagement\Hotel.Management.Event.Processor\Hotel.Management.Event.Processor.csproj", "{6158753A-59EA-4FC7-8D5B-63992F5DCBB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Booking.Common.Service", "Core\Hotel.Booking.Common.Service\Hotel.Booking.Common.Service.csproj", "{EBF9B7DF-482C-4881-A30E-F7BF061100D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Booking.Common.Service", "Core\Hotel.Booking.Common.Service\Hotel.Booking.Common.Service.csproj", "{EBF9B7DF-482C-4881-A30E-F7BF061100D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.WebApi.Middleware", "HotelManagement\Hotel.Management.WebApi.Middleware\Hotel.Management.WebApi.Middleware.csproj", "{2545BE00-3B48-436E-8722-E3C640D1E259}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.WebApi", "HotelManagement\Hotel.Management.WebApi\Hotel.Management.WebApi.csproj", "{10E5E629-6F8E-4C78-B1C8-52138D33C932}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +45,6 @@ Global
 		{E773855F-4CC7-45AE-9E74-38D087385BB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E773855F-4CC7-45AE-9E74-38D087385BB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E773855F-4CC7-45AE-9E74-38D087385BB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1DB3698-970F-47C1-8B3D-1262EB29DA5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1DB3698-970F-47C1-8B3D-1262EB29DA5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1DB3698-970F-47C1-8B3D-1262EB29DA5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1DB3698-970F-47C1-8B3D-1262EB29DA5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E0D7C6E9-5BD4-465C-8C71-669BA7E43DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E0D7C6E9-5BD4-465C-8C71-669BA7E43DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0D7C6E9-5BD4-465C-8C71-669BA7E43DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,13 +81,20 @@ Global
 		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBF9B7DF-482C-4881-A30E-F7BF061100D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2545BE00-3B48-436E-8722-E3C640D1E259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2545BE00-3B48-436E-8722-E3C640D1E259}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2545BE00-3B48-436E-8722-E3C640D1E259}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2545BE00-3B48-436E-8722-E3C640D1E259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E5E629-6F8E-4C78-B1C8-52138D33C932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E5E629-6F8E-4C78-B1C8-52138D33C932}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E5E629-6F8E-4C78-B1C8-52138D33C932}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E5E629-6F8E-4C78-B1C8-52138D33C932}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E773855F-4CC7-45AE-9E74-38D087385BB2} = {B61F2E8A-165E-45A2-A250-840FBC16CBE1}
-		{A1DB3698-970F-47C1-8B3D-1262EB29DA5B} = {B61F2E8A-165E-45A2-A250-840FBC16CBE1}
 		{E0D7C6E9-5BD4-465C-8C71-669BA7E43DDE} = {FADF78F5-82D1-4523-A34C-63C714C13949}
 		{21270C3E-D854-4240-B11C-A6A084D1879D} = {FADF78F5-82D1-4523-A34C-63C714C13949}
 		{8116798C-3A99-4F83-811E-5D6BF73F9496} = {FADF78F5-82D1-4523-A34C-63C714C13949}
@@ -99,6 +104,8 @@ Global
 		{93529889-6A6C-4C3E-BE51-382CB11EA245} = {FADF78F5-82D1-4523-A34C-63C714C13949}
 		{6158753A-59EA-4FC7-8D5B-63992F5DCBB1} = {B61F2E8A-165E-45A2-A250-840FBC16CBE1}
 		{EBF9B7DF-482C-4881-A30E-F7BF061100D9} = {FADF78F5-82D1-4523-A34C-63C714C13949}
+		{2545BE00-3B48-436E-8722-E3C640D1E259} = {B61F2E8A-165E-45A2-A250-840FBC16CBE1}
+		{10E5E629-6F8E-4C78-B1C8-52138D33C932} = {B61F2E8A-165E-45A2-A250-840FBC16CBE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B80A5646-3DA3-4AA8-B85E-D50493CE1F9D}

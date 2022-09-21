@@ -29,5 +29,15 @@ namespace Hotel.Management.Service.Translators
                 Description = category.Description
             };
         }
+
+        public static Model.HotelCategoryRelation ToModel(this HotelCategoryRelation relation)
+        {
+            return new Model.HotelCategoryRelation
+            {
+                Id = relation.Id,
+                HotelCategoryId = relation.HotelCategoryId,
+                HotelId = relation.HotelId
+            };
+        }
     }
 }

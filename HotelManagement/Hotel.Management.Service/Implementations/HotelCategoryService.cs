@@ -49,7 +49,7 @@ namespace Hotel.Management.Service.Implementations
             await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Deleted, hotelCategoryId);
         }
 
-        public async Task<List<HotelCategory>> GetHotelCategoriesByAsync(int hotelId)
+        public async Task<List<HotelCategory>> GetHotelCategoriesByHotelAsync(int hotelId)
         {
             var categories = await _hotelCategoryRepository.WhereAsync(c => c.HotelCategoryRelations.Any(r => r.HotelId == hotelId));
             return categories.Select(c => c.ToModel()).ToList();

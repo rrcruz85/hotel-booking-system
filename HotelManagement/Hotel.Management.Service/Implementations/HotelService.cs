@@ -1,7 +1,6 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
 using Hotel.Management.DataAccess.Interfaces;
-using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
 using Microsoft.Extensions.Configuration;
@@ -10,16 +9,19 @@ namespace Hotel.Management.Service.Implementations
 {
     public class HotelService : IHotelService
     {
+        private readonly ICityRepository _cityRepository;
         private readonly IHotelRepository _hotelRepository;
         private readonly IMessagingEngine _messagingEngine;
         private readonly IConfiguration _config;
         private readonly string TopicName = "HotelTopicName";
 
         public HotelService(
+            ICityRepository cityRepository,
             IHotelRepository hotelRepository, 
             IMessagingEngine messagingEngine, 
             IConfiguration config)
         {
+            _cityRepository = cityRepository;
             _hotelRepository = hotelRepository;
             _messagingEngine = messagingEngine;
             _config = config;
@@ -30,6 +32,11 @@ namespace Hotel.Management.Service.Implementations
             if (await _hotelRepository.AnyAsync(c => c.Name == hotel.Name))
             {
                 throw new ArgumentException($"Hotel name can not be duplicated");
+            }
+
+            if (!await _cityRepository.AnyAsync(x => x.Id == hotel.CityId))
+            {
+                throw new ArgumentException($"City does not exist");
             }
 
             var hotelId = await _hotelRepository.AddAsync(hotel.ToNewEntity());
@@ -49,11 +56,16 @@ namespace Hotel.Management.Service.Implementations
             await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelEventType.Deleted, hotelId);
         }
 
-
         public async Task<Model.Hotel?> GetHotelByIdAsync(int hotelId)
         {
             var hotel = await _hotelRepository.SingleOrDefaultAsync(c => c.Id == hotelId);
             return hotel?.ToModel();
+        }
+
+        public async Task<Model.HotelDetails?> GetHotelDetailsByIdAsync(int hotelId)
+        {
+            var hotel = await _hotelRepository.GetHotelWithDetails(hotelId);
+            return hotel?.ToDetailedModel();
         }
 
         public async Task<List<Model.Hotel>> GetHotelsByCityIdAsync(int cityId)

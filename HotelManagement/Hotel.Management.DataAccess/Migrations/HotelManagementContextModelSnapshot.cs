@@ -56,7 +56,10 @@ namespace Hotel.Management.DataAccess.Migrations
             modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Hotel", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AddressLine1")
                         .IsRequired()
@@ -98,7 +101,10 @@ namespace Hotel.Management.DataAccess.Migrations
             modelBuilder.Entity("Hotel.Management.DataAccess.Entities.HotelCategory", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasMaxLength(250)
@@ -256,7 +262,10 @@ namespace Hotel.Management.DataAccess.Migrations
             modelBuilder.Entity("Hotel.Management.DataAccess.Entities.Room", b =>
                 {
                     b.Property<int>("Id")
+                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("CurrentPrice")
                         .HasColumnType("money");

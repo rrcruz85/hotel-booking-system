@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using Hotel.Management.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace Hotel.Management.DataAccess
 {
     public partial class HotelManagementContext : DbContext
     {
-        public HotelManagementContext()
+        protected readonly IConfiguration _config;
+        
+        public HotelManagementContext(IConfiguration config, DbContextOptions options) : base(options)
         {
-        }
-
-        public HotelManagementContext(DbContextOptions<HotelManagementContext> options)
-            : base(options)
-        {
+            _config = config;
         }
 
         public virtual DbSet<City> Cities { get; set; } = null!;
@@ -50,7 +49,7 @@ namespace Hotel.Management.DataAccess
             {
                 entity.ToTable("Hotel");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id);
 
                 entity.Property(e => e.AddressLine1)
                     .HasMaxLength(100)
@@ -83,7 +82,7 @@ namespace Hotel.Management.DataAccess
             {
                 entity.ToTable("HotelCategory");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id);
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250)
@@ -183,7 +182,7 @@ namespace Hotel.Management.DataAccess
             {
                 entity.ToTable("Room");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id);
 
                 entity.Property(e => e.CurrentPrice).HasColumnType("money");
 
@@ -197,5 +196,11 @@ namespace Hotel.Management.DataAccess
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            // connect to sql server with connection string from app settings
+            options.UseSqlServer(_config.GetConnectionString("HotelManagement"));
+        }
     }
 }

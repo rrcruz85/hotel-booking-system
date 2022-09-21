@@ -16,6 +16,7 @@ namespace Hotel.Management.Service.Implementations
         private readonly IBlobStorageService _blobStorageService;
         private readonly IConfiguration _config;
         private readonly string TopicName = "HotelGalleryTopicName";
+        private readonly string BlobContainer = "hotel";
 
         public HotelGalleryService(
             IHotelGalleryRepository hotelGalleryRepository, 
@@ -29,90 +30,66 @@ namespace Hotel.Management.Service.Implementations
             _config = config;
         }
 
-        public async Task<int> CreateHotelFacilityAsync(HotelFacility hotelFacility)
-        {
-            if (await _hotelFacilityRepository.AnyAsync(c => c.Name == hotelFacility.Name && c.HotelId == hotelFacility.HotelId))
-            {
-                throw new ArgumentException($"Hotel facility name can not be duplicated");
-            }
-
-            var facilityId = await _hotelFacilityRepository.AddAsync(hotelFacility.ToNewEntity());
-            hotelFacility.Id = facilityId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Created, hotelFacility);
-            return facilityId;
-        }
-
         public async Task<int> CreateHotelImageAsync(CreateHotelImage image)
         {
-            var absoluteUri = await _blobStorageService.UploadTextAsync("hotel", $"{image.HotelId}-{DateTimeOffset.Now.ToString("yyyyMMsshhmm")}.png", image.BlobImageContent);
-            if (await _hotelGalleryRepository.AnyAsync(i => g.HotelId == image.HotelId))
+            var absoluteUri = await _blobStorageService.UploadTextAsync(BlobContainer, $"{image.HotelId}-{DateTimeOffset.Now:yyyyMMsshhmm}.png", image.BlobImageContent);
+
+            var newImage = new DataAccess.Entities.HotelGallery
             {
-                throw new ArgumentException($"Hotel facility name can not be duplicated");
-            }
+                BlobImageUri = absoluteUri,
+                Description = image.Description,
+                HotelId = image.HotelId
+            };
 
-            var facilityId = await _hotelFacilityRepository.AddAsync(hotelFacility.ToNewEntity());
-            hotelFacility.Id = facilityId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Created, hotelFacility);
-            return facilityId;
+            var imageId = await _hotelGalleryRepository.AddAsync(newImage);
+            newImage.Id = imageId;
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Created, newImage);
+            return imageId;
         }
-    
 
-        public async Task DeleteHotelFacilityAsync(int hotelFacilityId)
+        public async Task DeleteHotelImageAsync(int imageId)
         {
-            var facility = await _hotelFacilityRepository.SingleOrDefaultAsync(c => c.Id == hotelFacilityId);
-            if (facility == null)
+            var image = await _hotelGalleryRepository.SingleOrDefaultAsync(c => c.Id == imageId);
+            if (image == null)
             {
-                throw new ArgumentException($"Hotel facility {hotelFacilityId} does not exist");
+                throw new ArgumentException($"Hotel image {imageId} does not exist");
             }
-            await _hotelFacilityRepository.DeleteAsync(facility);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Deleted, hotelFacilityId);
+            await _hotelGalleryRepository.DeleteAsync(image);
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Deleted, imageId);
         }
 
-        public Task DeleteHotelImageAsync(int imageId)
+        public async Task<List<HotelImage>> GetHotelGalleryAsync(int hotelId)
         {
-            throw new NotImplementedException();
+            var entities = await _hotelGalleryRepository.WhereAsync(x => x.HotelId == hotelId);
+            return entities.Select(e => e.ToModel()).ToList();
         }
 
-        public async Task<List<HotelFacility>> GetHotelFacilitiesByHotelAsync(int hotelId)
+        public async Task<HotelImage?> GetHotelImageByAsync(int imageId)
         {
-            var facilities = await _hotelFacilityRepository.WhereAsync(c => c.HotelId == hotelId);
-            return facilities.Select(f => f.ToModel()).ToList();
+            var entity = await _hotelGalleryRepository.FirstOrDefaultAsync(x => x.Id == imageId);
+            return entity?.ToModel();
         }
 
-        public async Task<HotelFacility?> GetHotelFacilityByIdAsync(int hotelFacilityId)
+        public async Task UpdateHotelImageAsync(UpdateHotelImage image)
         {
-            var facility = await _hotelFacilityRepository.FirstOrDefaultAsync(c => c.Id == hotelFacilityId);
-            return facility?.ToModel();
-        }
-
-        public Task<List<HotelImage>> GetHotelGalleryAsync(int hotelId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HotelImage> GetHotelImageByAsync(int imageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task UpdateHotelFacilityAsync(HotelFacility hotelFacility)
-        {
-            var entity = await _hotelFacilityRepository.SingleOrDefaultAsync(c => c.Id == hotelFacility.Id);
+            var entity = await _hotelGalleryRepository.SingleOrDefaultAsync(c => c.Id == image.Id);
             if (entity == null)
             {
-                throw new ArgumentException($"Hotel facility {hotelFacility.Id} does not exist");
+                throw new ArgumentException($"Hotel image {image.Id} does not exist");
             }
-            if (await _hotelFacilityRepository.AnyAsync(c => c.Id != hotelFacility.Id && c.HotelId == hotelFacility.HotelId && c.Name == hotelFacility.Name))
+            if (entity.HotelId != image.HotelId)
             {
-                throw new ArgumentException($"Hotel facility name can not be duplicated");
+                throw new ArgumentException($"The hotel can not be changed");
             }
-            await _hotelFacilityRepository.UpdateAsync(hotelFacility.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Updated, hotelFacility);
-        }
 
-        public Task UpdateHotelImageAsync(UpdateHotelImage image)
-        {
-            throw new NotImplementedException();
+            var fileNameStartIndex = entity.BlobImageUri.LastIndexOf('/');
+            var fileName = entity.BlobImageUri[(fileNameStartIndex + 1)..];
+            await _blobStorageService.UploadTextAsync(BlobContainer, fileName, image.BlobImageContent);
+
+            entity.Description = image.Description;
+
+            await _hotelGalleryRepository.UpdateAsync(entity);
+            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Updated, entity);
         }
     }
 }

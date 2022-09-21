@@ -35,6 +35,13 @@ namespace Hotel.Booking.Common.Constant
         Deleted
     }
 
+    public enum HotelImageEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
     public enum HotelServiceEventType
     {
         Created = 1,

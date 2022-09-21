@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Constant\Hotel.Booking.Common.Constant.csproj" />
     <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Messaging\Hotel.Booking.Common.Messaging.csproj" />
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Service\Hotel.Booking.Common.Service.csproj" />
     <ProjectReference Include="..\Hotel.Management.DataAccess\Hotel.Management.DataAccess.csproj" />
     <ProjectReference Include="..\Hotel.Management.Model\Hotel.Management.Model.csproj" />
   </ItemGroup>

@@ -16,7 +16,6 @@ namespace Hotel.Management.Event.Processor
             builder.Services.AddRepositories();
             builder.Services.AddBusinessServices();
             builder.Services.AddSingleton<IRoomEventProcessor, RoomEventProcessor>();
-            builder.Services.AddSingleton<IReservationEventProcessor, ReservationEventProcessor>();
         }
     }
 }

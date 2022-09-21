@@ -52,9 +52,9 @@ namespace Hotel.Management.Service.Implementations
             return cites.Select(c => c.ToModel()).OrderBy(c => c.Name).ToList();
         }
 
-        public async Task<List<City>> GetCitiesByStateAsync(string state)
+        public async Task<List<City>> GetCitiesByNameAsync(string name)
         {
-            var cites = await _cityRepository.WhereAsync(c => c.State == state);
+            var cites = await _cityRepository.WhereAsync(c => c.Name == name);
             return cites.Select(c => c.ToModel()).OrderBy(c => c.Name).ToList();
         }
 
@@ -64,7 +64,7 @@ namespace Hotel.Management.Service.Implementations
             return cites.Select(c => c.ToModel()).OrderBy(c => c.Name).ToList();
         }
 
-        public async Task<City> GetCityByAsync(int cityId)
+        public async Task<City?> GetCityByAsync(int cityId)
         {
             var city = await _cityRepository.SingleOrDefaultAsync(c => c.Id == cityId);
             return city?.ToModel();

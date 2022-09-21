@@ -8,16 +8,22 @@ namespace Hotel.Management.Service.Implementations
 {
     public class HotelCategoryRelationService : IHotelCategoryRelationService
     {
+        private readonly IHotelRepository _hotelRepository;
+        private readonly IHotelCategoryRepository _hotelCategoryRepository;
         private readonly IHotelCategoryRelationRepository _hotelCategoryRelationRepository;
         private readonly IMessagingEngine _messagingEngine;
         private readonly IConfiguration _config;
         private readonly string TopicName = "HotelCategoryRelationTopicName";
 
         public HotelCategoryRelationService(
+            IHotelRepository hotelRepository,
+            IHotelCategoryRepository hotelCategoryRepository,
             IHotelCategoryRelationRepository hotelCategoryRelationRepository,
             IMessagingEngine messagingEngine,
             IConfiguration config)
         {
+            _hotelRepository = hotelRepository;
+            _hotelCategoryRepository = hotelCategoryRepository;
             _hotelCategoryRelationRepository = hotelCategoryRelationRepository;
             _messagingEngine = messagingEngine;
             _config = config;
@@ -25,6 +31,16 @@ namespace Hotel.Management.Service.Implementations
 
         public async Task<int> CreateHotelCategoryRelationAsync(int hotelId, int categotyId)
         {
+            if (!await _hotelRepository.AnyAsync(x => x.Id == hotelId))
+            {
+                throw new ArgumentException($"Hotel does not exist");
+            }
+
+            if (!await _hotelCategoryRepository.AnyAsync(x => x.Id == categotyId))
+            {
+                throw new ArgumentException($"Hotel category does not exist");
+            }
+
             if (await _hotelCategoryRelationRepository.AnyAsync(c => c.HotelId == hotelId && c.HotelCategoryId == categotyId))
             {
                 throw new ArgumentException($"Hotel category relation can not be duplicated");

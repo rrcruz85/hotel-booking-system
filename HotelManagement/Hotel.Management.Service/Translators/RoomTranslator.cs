@@ -29,14 +29,14 @@ namespace Hotel.Management.Service.Translators
         {
             return new Model.Room
             {
-               CurrentPrice = room.CurrentPrice,               
-               Floor = room.Floor,
-               HotelId = room.HotelId,
-               Id = room.Id,
-               MaxCapacity = room.MaxCapacity,
-               Type = room.Type,
-               Status = room.Status,
-               Number = room.Number
+                Id = room.Id,
+                CurrentPrice = room.CurrentPrice,
+                Floor = room.Floor,
+                HotelId = room.HotelId,
+                MaxCapacity = room.MaxCapacity,
+                Type = room.Type,
+                Status = room.Status,
+                Number = room.Number
             };
         }
     }

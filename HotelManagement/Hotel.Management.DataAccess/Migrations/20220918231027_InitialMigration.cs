@@ -27,7 +27,8 @@ namespace Hotel.Management.DataAccess.Migrations
                 name: "HotelCategory",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: true)
                 },
@@ -40,7 +41,7 @@ namespace Hotel.Management.DataAccess.Migrations
                 name: "Hotel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
                     AddressLine1 = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     AddressLine2 = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
@@ -170,7 +171,8 @@ namespace Hotel.Management.DataAccess.Migrations
                 name: "Room",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
                     HotelId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),

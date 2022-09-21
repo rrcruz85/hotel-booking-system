@@ -7,6 +7,6 @@ namespace Hotel.Management.Service.Interfaces
         Task UpdateHotelCategoryAsync(Model.HotelCategory category);
         Task DeleteHotelCategoryAsync(int hotelCategoryId);
         Task<Model.HotelCategory?> GetHotelCategoryByAsync(int hotelCategoryId);
-        Task<List<Model.HotelCategory>> GetHotelCategoriesByAsync(int hotelId);         
+        Task<List<Model.HotelCategory>> GetHotelCategoriesByHotelAsync(int hotelId);         
     }
 }

@@ -6,17 +6,17 @@ namespace Hotel.Management.DataAccess.Extensions
 {
     public static class ServiceCollection
     {
-        public static void AddRepositories(this IServiceCollection service)
+        public static void AddRepositories(this IServiceCollection services)
         {
-            service.AddScoped<ICityRepository, CityRepository>();
-            service.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
-            service.AddScoped<IHotelCategoryRelationRepository, HotelCategoryRelationRepository>();
-            service.AddScoped<IHotelContactInfoRepository, HotelContactInfoRepository>();
-            service.AddScoped<IHotelFacilityRepository, HotelFacilityRepository>();
-            service.AddScoped<IHotelGalleryRepository, HotelGalleryRepository>();
-            service.AddScoped<IHotelRepository, HotelRepository>();
-            service.AddScoped<IHotelServiceRepository, HotelServiceRepository>();
-            service.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IHotelCategoryRepository, HotelCategoryRepository>();
+            services.AddScoped<IHotelCategoryRelationRepository, HotelCategoryRelationRepository>();
+            services.AddScoped<IHotelContactInfoRepository, HotelContactInfoRepository>();
+            services.AddScoped<IHotelFacilityRepository, HotelFacilityRepository>();
+            services.AddScoped<IHotelGalleryRepository, HotelGalleryRepository>();
+            services.AddScoped<IHotelRepository, HotelRepository>();
+            services.AddScoped<IHotelServiceRepository, HotelServiceRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
         }
     }   
 }
