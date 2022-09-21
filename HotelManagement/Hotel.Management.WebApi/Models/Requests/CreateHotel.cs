@@ -10,7 +10,7 @@ namespace Hotel.Management.WebApi.Models.Requests
 
         [Required]
         [MinLength(1)]
-        public string AddressLine1 { get; set; } 
+        public string AddressLine1 { get; set; }
 
         public string? AddressLine2 { get; set; }
 

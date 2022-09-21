@@ -9,5 +9,6 @@ namespace Hotel.Management.Service.Interfaces
         Task<Model.HotelContactInfo?> GetHotelContactInfoByAsync(int hotelContactInfoId);
         Task<List<Model.HotelContactInfo>> GetHotelContactInfoByHotelAsync(int hotelId);
         Task<Model.HotelContactInfo?> GetHotelContactInfoByHotelAndTypeAsync(int hotelId, int type);
+        IDictionary<int, string> GetHotelContactInfoTypes();
     }
 }

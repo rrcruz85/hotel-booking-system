@@ -2,7 +2,10 @@
 {
     public enum RoomStatus
     {
-        Available = 1,
+        Created = 1,
+        Updated,
+        Deleted,
+        Available,
         Booked,
         OutOfService
     }

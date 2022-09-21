@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Hotel.Management.Service.Interfaces;
+using Hotel.Management.WebApi.Models.Requests;
+using Hotel.Management.WebApi.Translator;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,67 @@ namespace Hotel.Management.WebApi.Controllers
     [ApiController]
     public class HotelContactInfoController : ControllerBase
     {
-        // GET: api/<HotelController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IHotelContactInfoService _hotelContactInfoService;
+
+        public HotelContactInfoController(IHotelContactInfoService hotelContactInfoService)
         {
-            return new string[] { "value1", "value2" };
+            _hotelContactInfoService = hotelContactInfoService;
         }
 
-        // GET api/<HotelController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<HotelContactInfoController>/5
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetAsync(int id)
         {
-            return "value";
+            var contactInfo = await _hotelContactInfoService.GetHotelContactInfoByAsync(id);
+            return Ok(contactInfo);
         }
 
-        // POST api/<HotelController>
+        // GET api/<HotelContactInfoController>/hotel/1
+        [HttpGet("hotel/{hotelId:int}")]
+        public async Task<IActionResult> GetByHotelIdAsync(int hotelId)
+        {
+            var contactInfos = await _hotelContactInfoService.GetHotelContactInfoByHotelAsync(hotelId);
+            return Ok(contactInfos);
+        }
+
+        // GET api/<HotelContactInfoController>/hotel/1/type1
+        [HttpGet("hotel/{hotelId:int}/type/{type:int}")]
+        public async Task<IActionResult> GetByHotelIdAndTypeAsync(int hotelId, int type)
+        {
+            var contactInfos = await _hotelContactInfoService.GetHotelContactInfoByHotelAndTypeAsync(hotelId, type);
+            return Ok(contactInfos);
+        }
+
+        // POST api/<HotelContactInfoController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> PostAsync([FromBody] CreateHotelContactInfo request)
         {
+            var categoryId = await _hotelContactInfoService.CreateHotelContactInfoAsync(request.ToBusinessModel());
+            return Ok($"Contact Info {categoryId} was successfully created");
         }
 
-        // PUT api/<HotelController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // PUT api/<HotelContactInfoController>
+        [HttpPut]
+        public async Task<IActionResult> PutAsync([FromBody] UpdateHotelContactInfo request)
         {
+            await _hotelContactInfoService.UpdateHotelContactInfoAsync(request.ToBusinessModel());
+            return Ok($"Contact Info was successfully updated");
         }
 
-        // DELETE api/<HotelController>/5
+        // DELETE api/<HotelContactInfoController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _hotelContactInfoService.DeleteHotelContactInfoAsync(id);
+            return Ok();
+        }
+
+        // GET api/<HotelContactInfoController>/types
+        [HttpGet("types")]
+        public IActionResult GetAllContactInfoTypes()
+        {
+            var contactInfoTypes = _hotelContactInfoService.GetHotelContactInfoTypes();
+            return Ok(contactInfoTypes);
         }
     }
 }

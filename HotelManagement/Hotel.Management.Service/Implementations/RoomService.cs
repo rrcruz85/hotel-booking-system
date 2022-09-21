@@ -72,7 +72,43 @@ namespace Hotel.Management.Service.Implementations
         {
             var rooms = await _roomRepository.WhereAsync(r => r.Status == status && r.HotelId == hotelId);
             return rooms.Select(r => r.ToModel()).OrderBy(r => r.Number).ToList();
-        }        
+        }
+
+        public async Task<List<Room>> GetRoomsByTypeAndHotelAsync(int hotelId, int type)
+        {
+            var rooms = await _roomRepository.WhereAsync(r => r.Type == type && r.HotelId == hotelId);
+            return rooms.Select(r => r.ToModel()).OrderBy(r => r.Number).ToList();
+        }
+
+        public IDictionary<int, string> GetRoomStatuses()
+        {
+            return new Dictionary<int, string>
+            {
+                {(int)RoomStatus.Created,  RoomStatus.Created.ToString()},
+
+                {(int)RoomStatus.Updated,  RoomStatus.Updated.ToString()},
+
+                {(int)RoomStatus.Deleted,  RoomStatus.Deleted.ToString()},
+
+                {(int)RoomStatus.Available,  RoomStatus.Available.ToString()},
+
+                {(int)RoomStatus.OutOfService,  RoomStatus.OutOfService.ToString()},
+
+                {(int)RoomStatus.Booked,  RoomStatus.Booked.ToString()},
+            };
+        }
+
+        public IDictionary<int, string> GetRoomTypes()
+        {
+            return new Dictionary<int, string>
+            {
+                {(int)RoomType.Simple,  RoomType.Simple.ToString()},
+
+                {(int)RoomType.Double,  RoomType.Double.ToString()},
+
+                {(int)RoomType.Triple,  RoomType.Triple.ToString()} 
+            };
+        }
 
         public async Task UpdateRoomAsync(Room room)
         {

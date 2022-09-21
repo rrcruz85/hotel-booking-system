@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hotel.Booking.Common.Contract\Hotel.Booking.Common.Contract.csproj" />
-    <ProjectReference Include="..\Hotel.Booking.Common.Utility\Hotel.Booking.Common.Utility.csproj" />
   </ItemGroup>
 
 </Project>

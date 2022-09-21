@@ -68,6 +68,22 @@ namespace Hotel.Management.Service.Implementations
             return contacts.Select(c => c.ToModel()).OrderBy(c => c.Type).ToList();
         }
 
+        public IDictionary<int, string> GetHotelContactInfoTypes()
+        {
+            return new Dictionary<int, string>
+            {
+                {(int)ContactType.PersonalMobile,  ContactType.PersonalMobile.ToString()},
+                {(int)ContactType.WorkMobile,  ContactType.WorkMobile.ToString()},
+                {(int)ContactType.HomePhoneNumber,  ContactType.HomePhoneNumber.ToString()},
+                {(int)ContactType.WorkPhoneNumber,  ContactType.WorkPhoneNumber.ToString()},
+                {(int)ContactType.PersonalEmail,  ContactType.PersonalEmail.ToString()},
+                {(int)ContactType.WorkEmail,  ContactType.WorkEmail.ToString()},
+                {(int)ContactType.Fax,  ContactType.Fax.ToString()},
+                {(int)ContactType.Facebook,  ContactType.Facebook.ToString()},
+                {(int)ContactType.LinkedIn,  ContactType.LinkedIn.ToString()},
+            };
+        }
+
         public async Task UpdateHotelContactInfoAsync(HotelContactInfo contactInfo)
         {
             var entity = await _hotelContactInfoRepository.SingleOrDefaultAsync(c => c.Id == contactInfo.Id);
