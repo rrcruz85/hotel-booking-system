@@ -57,7 +57,7 @@ namespace Hotel.Management.WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _hotelCategoryService.DeleteHotelCategoryAsync(id);
-            return Ok();
+            return Ok("Category deleted successfully");
         }
 
         // POST api/<HotelCategoryController>/relation

@@ -32,7 +32,7 @@ namespace Hotel.Management.Service.Implementations
 
         public async Task<int> CreateHotelImageAsync(CreateHotelImage image)
         {
-            var absoluteUri = await _blobStorageService.UploadTextAsync(BlobContainer, $"{image.HotelId}-{DateTimeOffset.Now:yyyyMMsshhmm}.png", image.BlobImageContent);
+            var absoluteUri = await _blobStorageService.UploadTextAsync(BlobContainer, $"{image.HotelId}-{DateTimeOffset.Now:yyyyMMsshhmm}.png", "image/png", image.BlobImageContent);
 
             var newImage = new DataAccess.Entities.HotelGallery
             {
@@ -54,6 +54,11 @@ namespace Hotel.Management.Service.Implementations
             {
                 throw new ArgumentException($"Hotel image {imageId} does not exist");
             }
+
+            var fileNameStartIndex = image.BlobImageUri.LastIndexOf('/');
+            var fileName = image.BlobImageUri[(fileNameStartIndex + 1)..];
+            await _blobStorageService.DeleteBlobByName(BlobContainer, fileName);
+
             await _hotelGalleryRepository.DeleteAsync(image);
             await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Deleted, imageId);
         }
@@ -84,7 +89,7 @@ namespace Hotel.Management.Service.Implementations
 
             var fileNameStartIndex = entity.BlobImageUri.LastIndexOf('/');
             var fileName = entity.BlobImageUri[(fileNameStartIndex + 1)..];
-            await _blobStorageService.UploadTextAsync(BlobContainer, fileName, image.BlobImageContent);
+            await _blobStorageService.UploadTextAsync(BlobContainer, fileName, "image/png", image.BlobImageContent);
 
             entity.Description = image.Description;
 

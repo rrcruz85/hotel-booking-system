@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System.Text;
 
 namespace Hotel.Booking.Common.Service
 {
@@ -13,7 +14,7 @@ namespace Hotel.Booking.Common.Service
         public BlobStorageService(IConfiguration config)
         {
             _config = config;
-            var storageAccount = CloudStorageAccount.Parse(_config["ConnectionStrings:BlobStorageConnectionString"]);
+            var storageAccount = CloudStorageAccount.Parse(_config["BlobStorageConnectionString"]);
             _blobClient = storageAccount.CreateCloudBlobClient();
         }
 
@@ -29,17 +30,22 @@ namespace Hotel.Booking.Common.Service
             return await blob.ExistsAsync();
         }
 
-        public async Task<string> UploadTextAsync(string containerName, string blobName, string content)
+        public async Task<string> UploadTextAsync(string containerName, string blobName, string contentType, string content)
         {
             var blob = await GetBlobReference(containerName, blobName);
-            await blob.UploadTextAsync(content);
+            blob.Properties.ContentType = contentType;
+            byte[] svgXml = Encoding.UTF8.GetBytes(content);
+            await blob.UploadFromByteArrayAsync(svgXml, 0, svgXml.Length);
+            await blob.SetPropertiesAsync();
             return blob.StorageUri.PrimaryUri.AbsoluteUri;
         }
 
-        public async Task<string> UploadStreamAsync(string containerName, string blobName, Stream content)
+        public async Task<string> UploadStreamAsync(string containerName, string blobName, string contentType, Stream content)
         {
             var blob = await GetBlobReference(containerName, blobName);
+            blob.Properties.ContentType = contentType;
             await blob.UploadFromStreamAsync(content);
+            await blob.SetPropertiesAsync();
             return blob.StorageUri.PrimaryUri.AbsoluteUri;
         }
 
@@ -104,7 +110,7 @@ namespace Hotel.Booking.Common.Service
 
             var container = await GetContainerAsync(containerName);
 
-            BlobContinuationToken blobContinuationToken = null;
+            BlobContinuationToken? blobContinuationToken = null;
 
             if (!string.IsNullOrEmpty(directoryRelativePath))
             {
@@ -150,6 +156,16 @@ namespace Hotel.Booking.Common.Service
             while (blobContinuationToken != null);
 
             return blobNames;
+        }
+
+        public async Task<bool> DeleteBlobByName(string containerName, string blobName)
+        {
+            var blob = await GetBlobReferenceAsync(containerName, blobName);
+            if (await blob.ExistsAsync())
+            {
+                return await blob.DeleteIfExistsAsync();
+            }
+            return false;
         }
     }
 }
