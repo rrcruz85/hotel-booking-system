@@ -1,4 +1,5 @@
-﻿using Hotel.Management.DataAccess.Entities;
+﻿
+using Hotel.Management.DataAccess.Entities;
 
 namespace Hotel.Management.Service.Translators
 {

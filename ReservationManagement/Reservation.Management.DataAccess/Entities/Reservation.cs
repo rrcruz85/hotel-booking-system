@@ -21,7 +21,6 @@ namespace Reservation.Management.DataAccess.Entities
         public int Status { get; set; }
         public int? PaymentMethodType { get; set; }
         public string? PaymentMethodInfo { get; set; }
-
         public virtual User User { get; set; } = null!;
         public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<ReservationHistory> ReservationHistories { get; set; }
