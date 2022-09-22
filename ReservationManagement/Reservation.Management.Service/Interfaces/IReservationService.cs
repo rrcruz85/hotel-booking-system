@@ -8,10 +8,8 @@ namespace Reservation.Management.Service.Interfaces
         Task UpdateReservationStatusAsync(int reservationId, int status, string observations);
         Task DeleteReservationAsync(int reservationId);
         Task<Model.Reservation?> GetReservationByIdAsync(int reservationId);
-        Task<Model.Reservation?> GetReservationDeatilsByIdAsync(int reservationId);
+        Task<Model.Reservation?> GetReservationDetailsByIdAsync(int reservationId);
         Task<List<Model.Reservation>> GetReservationsByHotelIdAsync(int hotelId);
-        Task<Model.Room?> GetRoomByNumberAsync(int hotelId, int number);
-        Task<List<Model.Room>> GetRoomsByStatusAndHotelAsync(int hotelId, int status);
-        Task<List<Model.Room>> GetRoomsByTypeAndHotelAsync(int hotelId, int type);
+        Task<List<Model.Reservation>> GetReservationsByUserIdAsync(int userId);        
     }
 }

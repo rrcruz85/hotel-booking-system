@@ -19,17 +19,18 @@ namespace Reservation.Management.Service.Translators
             };
         }
  
-        public static Model.Hotel ToModel(this DataAccess.Entities.Hotel hotel)
+        public static Model.Reservation ToModel(this DataAccess.Entities.Reservation reservation)
         {
-            return new Model.Hotel
+            return new Model.Reservation
             {
-                Id = hotel.Id,
-                AddressLine1 = hotel.AddressLine1,
-                AddressLine2 = hotel.AddressLine2,
-                CityId = hotel.CityId,
-                GeoLocation = hotel.GeoLocation,
-                Name = hotel.Name,
-                Zip = hotel.Zip
+                Id = reservation.Id,
+                EndDate = reservation.EndDate,
+                Observations = reservation.Observations,
+                PaymentMethodInfo = reservation.PaymentMethodInfo,
+                PaymentMethodType = reservation.PaymentMethodType,
+                StartDate = reservation.StartDate,
+                Status = reservation.Status,
+                UserId = reservation.UserId
             };
         }
     }

@@ -58,39 +58,47 @@ namespace Reservation.Management.Service.Implementations
             return reservationId;
         }
 
-        public Task DeleteReservationAsync(int reservationId)
+        public async Task DeleteReservationAsync(int reservationId)
+        {
+            var entity = await _reservationRepository.FirstOrDefaultAsync(r => r.Id == reservationId);
+            if (entity == null)
+            {
+                throw new ArgumentException($"reservation {reservationId} not found");
+            }
+
+            if (entity.Status != (int)ReservationStatus.Canceled && entity.StartDate <= DateTime.Now && entity.EndDate >= DateTime.Now)
+            {
+                foreach(var r in entity.RoomReservations.Select(r => new { r.RoomId, RoomStatus = RoomStatus.Available}).ToList())
+                {
+                    await _messagingEngine.PublishEventMessageAsync(RoomTopicName, (int)RoomEventType.Available, r);
+                }
+            }
+
+            await _reservationRepository.DeleteAsync(entity);
+            await _messagingEngine.PublishEventMessageAsync(ReservationTopicName, (int)ReservationEventType.Deleted, entity);
+        }
+
+        public async Task<Model.Reservation?> GetReservationByIdAsync(int reservationId)
+        {
+            var entity = await _reservationRepository.FirstOrDefaultAsync(r => r.Id == reservationId);
+            return entity?.ToModel();
+        }
+
+        public Task<Model.Reservation?> GetReservationDetailsByIdAsync(int reservationId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Model.Reservation?> GetReservationByIdAsync(int reservationId)
+        public async Task<List<Model.Reservation>> GetReservationsByHotelIdAsync(int hotelId)
         {
-            throw new NotImplementedException();
+            var entities = await _reservationRepository.WhereAsync(r => r.RoomReservations.Any(rr => rr.ReservationNavigation.HotelId == hotelId));
+            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToModel()).ToList();
         }
 
-        public Task<Model.Reservation?> GetReservationDeatilsByIdAsync(int reservationId)
+        public async Task<List<Model.Reservation>> GetReservationsByUserIdAsync(int userId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Model.Reservation>> GetReservationsByHotelIdAsync(int hotelId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Room?> GetRoomByNumberAsync(int hotelId, int number)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Room>> GetRoomsByStatusAndHotelAsync(int hotelId, int status)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Room>> GetRoomsByTypeAndHotelAsync(int hotelId, int type)
-        {
-            throw new NotImplementedException();
+            var entities = await _reservationRepository.WhereAsync(r => r.UserId == userId);
+            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToModel()).ToList();
         }
 
         public Task UpdateReservationAsync(Model.Reservation room)
@@ -98,9 +106,17 @@ namespace Reservation.Management.Service.Implementations
             throw new NotImplementedException();
         }
 
-        public Task UpdateReservationStatusAsync(int reservationId, int status, string observations)
+        public async Task UpdateReservationStatusAsync(int reservationId, int status, string observations)
         {
-            throw new NotImplementedException();
+            var entity = await _reservationRepository.SingleOrDefaultAsync(c => c.Id == reservationId);
+            if (entity == null)
+            {
+                throw new ArgumentException($"Reservation {reservationId} does not exist");
+            }            
+            entity.Status = status;
+            entity.Observations = observations;
+            await _reservationRepository.UpdateAsync(entity);
+            await _messagingEngine.PublishEventMessageAsync(_config[ReservationTopicName], (int)ReservationEventType.Updated, entity);
         }
     }
 }
