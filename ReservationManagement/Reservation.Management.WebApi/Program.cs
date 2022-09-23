@@ -1,3 +1,4 @@
+using Hotel.Booking.Common.WebApi.Middleware;
 using Reservation.Management.DataAccess;
 using Reservation.Management.WebApi.Extensions;
 
@@ -26,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseUnhandledExceptionHandler();
 //app.UseHttpsRedirection();
 //app.UseAuthorization();
 

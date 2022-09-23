@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reservation.Management.WebApi.Models.Requests
 {
+    [ExcludeFromCodeCoverage]
     public class CreateReservation
     {
         [Required]

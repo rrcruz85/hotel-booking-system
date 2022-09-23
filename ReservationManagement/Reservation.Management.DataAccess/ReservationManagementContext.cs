@@ -325,9 +325,9 @@ namespace Reservation.Management.DataAccess
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RoomReservation_Reservation");
 
-                entity.HasOne(d => d.ReservationNavigation)
+                entity.HasOne(d => d.Room)
                     .WithMany(p => p.RoomReservations)
-                    .HasForeignKey(d => d.ReservationId)
+                    .HasForeignKey(d => d.RoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RoomReservation_Room");
             });

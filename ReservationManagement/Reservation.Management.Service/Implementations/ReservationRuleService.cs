@@ -23,7 +23,12 @@ namespace Reservation.Management.Service.Implementations
             if (reservation.EndDate <= DateTime.Now || (reservation.StartDate <= DateTime.Now && reservation.EndDate >= DateTime.Now))
             {
                 return false;
-            }           
+            }
+
+            if (reservation.Rooms.Count() == 0)
+            {
+                return false;
+            }
 
             var roomIds = reservation.Rooms.Select(r => r.RoomId).ToList();
             var isThereAnyReservation = await _roomRepository.WhereQueryable(r => 
@@ -40,29 +45,7 @@ namespace Reservation.Management.Service.Implementations
 
         public async Task<IReservationRuleValidationResponse> CheckRulesOnCreateAsync(IReservationContext reservation)
         {
-            var response = new ReservationRuleValidationResponse();
-
-            if (reservation.StartDate >= reservation.EndDate)
-            {
-                response.Ok = false;
-                response.Message = "Start Date must be lower than or equal to End Date";
-                return response;
-            }
-
-            var duration = reservation.EndDate.Subtract(reservation.StartDate);
-            if (duration.Days > ReservationDurationInDaysLimit)
-            {
-                response.Ok = false;
-                response.Message = $"Reservation can not last more than {ReservationDurationInDaysLimit} days";
-                return response;
-            }
-
-            if (reservation.StartDate >= DateTime.Now.AddDays(DaysInAdvanceForReservationLimit))
-            {
-                response.Ok = false;
-                response.Message = $"Reservation can not be scheduled with more than {DaysInAdvanceForReservationLimit} days in advance";
-                return response;
-            }
+            var response = CheckCommonRules(reservation);
 
             var minStartDate = DateTime.Now.AddDays(ReservationMinStartDaysLimit);
             if (reservation.StartDate <= minStartDate)
@@ -84,12 +67,33 @@ namespace Reservation.Management.Service.Implementations
 
         public async Task<IReservationRuleValidationResponse> CheckRulesOnUpdateAsync(IReservationContext reservation)
         {
+            var response = CheckCommonRules(reservation);
+
+            var roomsAreAvailable = await CheckRoomsAvailabiltyAsync(reservation);
+            if (!roomsAreAvailable)
+            {
+                response.Ok = false;
+                response.Message = $"Rooms are not available in the selectect range of dates";
+            }
+            
+            return response;
+        }
+
+        private IReservationRuleValidationResponse CheckCommonRules(IReservationContext reservation)
+        {
             var response = new ReservationRuleValidationResponse();
 
             if (reservation.StartDate >= reservation.EndDate)
             {
                 response.Ok = false;
                 response.Message = "Start Date must be lower than or equal to End Date";
+                return response;
+            }
+
+            if (reservation.Rooms.Count() == 0)
+            {
+                response.Ok = false;
+                response.Message = "You must provide at least one room";
                 return response;
             }
 
@@ -108,14 +112,8 @@ namespace Reservation.Management.Service.Implementations
                 return response;
             }
 
-            var roomsAreAvailable = await CheckRoomsAvailabiltyAsync(reservation);
-            if (!roomsAreAvailable)
-            {
-                response.Ok = false;
-                response.Message = $"Rooms are not available in the selectect range of dates";
-            }
-            
             return response;
         }
+
     }
 }

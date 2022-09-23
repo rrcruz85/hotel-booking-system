@@ -444,6 +444,8 @@ namespace Reservation.Management.DataAccess.Migrations
 
                     b.HasIndex("ReservationId");
 
+                    b.HasIndex("RoomId");
+
                     b.ToTable("RoomReservation", (string)null);
                 });
 
@@ -715,15 +717,15 @@ namespace Reservation.Management.DataAccess.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_RoomReservation_Reservation");
 
-                    b.HasOne("Reservation.Management.DataAccess.Entities.Room", "ReservationNavigation")
+                    b.HasOne("Reservation.Management.DataAccess.Entities.Room", "Room")
                         .WithMany("RoomReservations")
-                        .HasForeignKey("ReservationId")
+                        .HasForeignKey("RoomId")
                         .IsRequired()
                         .HasConstraintName("FK_RoomReservation_Room");
 
                     b.Navigation("Reservation");
 
-                    b.Navigation("ReservationNavigation");
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Reservation.Management.DataAccess.Entities.User", b =>

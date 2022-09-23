@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.WebApi.Middleware\Hotel.Booking.Common.WebApi.Middleware.csproj" />
     <ProjectReference Include="..\Hotel.Management.Service\Hotel.Management.Service.csproj" />
-    <ProjectReference Include="..\Hotel.Management.WebApi.Middleware\Hotel.Management.WebApi.Middleware.csproj" />
   </ItemGroup>
 
 </Project>

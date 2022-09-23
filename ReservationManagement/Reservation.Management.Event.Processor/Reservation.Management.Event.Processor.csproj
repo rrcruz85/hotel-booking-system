@@ -1,11 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.7.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Constant\Hotel.Booking.Common.Constant.csproj" />
+    <ProjectReference Include="..\Reservation.Management.Model\Reservation.Management.Model.csproj" />
+    <ProjectReference Include="..\Reservation.Management.Service\Reservation.Management.Service.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

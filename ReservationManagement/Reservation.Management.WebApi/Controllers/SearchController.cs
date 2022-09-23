@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Reservation.Management.Service.Interfaces;
+using Reservation.Management.WebApi.Models.Requests;
+using Reservation.Management.WebApi.Translator;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,26 @@ namespace Reservation.Management.WebApi.Controllers
     [ApiController]
     public class SearchController : ControllerBase
     {
-        // GET: api/<SearchController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        private readonly ISearchService _searchService;
 
-        // GET api/<SearchController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public SearchController(ISearchService searchService)
         {
-            return "value";
+            _searchService = searchService;
         }
 
         // POST api/<SearchController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> SearchRooms([FromBody] SearchCriteria searchCriteria)
         {
-        }
-
-        // PUT api/<SearchController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<SearchController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+            try
+            {
+                var rooms = await _searchService.Search(searchCriteria.ToBusinessModel());
+                return Ok(rooms);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }         
     }
 }

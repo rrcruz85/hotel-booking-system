@@ -1,10 +1,11 @@
 ﻿using Reservation.Management.Model;
 using Reservation.Management.WebApi.Models.Requests;
-using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reservation.Management.WebApi.Translator
 {
-    public static class Reservation
+    [ExcludeFromCodeCoverage]
+    public static class ReservationTranslator
     {
         public static CreateUpdateReservation ToBusinessModel(this CreateReservation reservation)
         {

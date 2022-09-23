@@ -86,6 +86,9 @@ namespace Reservation.Management.Service.Implementations
                 throw new ArgumentException($"Ongoing reservation can not be changed");
             }
 
+            var rooms = await _roomReservationRepository.WhereAsync(r => r.ReservationId == reservationId);
+            await _roomReservationRepository.DeleteMultipleAsync(rooms);
+
             await _reservationRepository.DeleteAsync(entity);
 
             await _reservationHistoryRepository.AddAsync(new DataAccess.Entities.ReservationHistory
@@ -110,20 +113,26 @@ namespace Reservation.Management.Service.Implementations
 
         public async Task<ReservationDetails?> GetReservationDetailsByIdAsync(int reservationId)
         {
-            var entity = await _reservationRepository.FirstOrDefaultAsync(r => r.Id == reservationId);
+            var entity = await _reservationRepository.GetWithRelationsAsync(reservationId);
             return entity?.ToDetailModel();
         }
 
-        public async Task<List<Model.Reservation>> GetReservationsByHotelIdAsync(int hotelId)
+        public async Task<List<ReservationDetails>> GetReservationsByHotelIdAsync(int hotelId)
         {
-            var entities = await _reservationRepository.WhereAsync(r => r.RoomReservations.Any(rr => rr.ReservationNavigation.HotelId == hotelId));
-            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToBaseModel()).ToList();
+            var entities = await _reservationRepository.GetByHotelIdWithRelationsAsync(hotelId);
+            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToDetailModel()).ToList();
         }
 
-        public async Task<List<Model.Reservation>> GetReservationsByUserIdAsync(int userId)
+        public async Task<List<ReservationDetails>> GetReservationsByUserIdAsync(int userId)
         {
-            var entities = await _reservationRepository.WhereAsync(r => r.UserId == userId);
-            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToBaseModel()).ToList();
+            var entities = await _reservationRepository.GetByUserIdWithRelationsAsync(userId);
+            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToDetailModel()).ToList();
+        }
+
+        public async Task<List<ReservationDetails>> GetReservationsByHotelIdAndDatesAsync(int hotelId, DateTime startDate, DateTime endDate)
+        {
+            var entities = await _reservationRepository.GetReservationsByHotelAndDatesAsync(hotelId, startDate, endDate);
+            return entities.OrderByDescending(r => r.StartDate).Select(r => r.ToDetailModel()).ToList();
         }
 
         public async Task UpdateReservationAsync(CreateUpdateReservation reservation)

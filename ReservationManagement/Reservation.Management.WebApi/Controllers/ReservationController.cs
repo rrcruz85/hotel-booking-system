@@ -20,10 +20,42 @@ namespace Reservation.Management.WebApi.Controllers
 
         // GET api/<ReservationController>/5
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetReservationAsync(int id)
         {
             var reservation = await _reservationService.GetReservationByIdAsync(id);
             return Ok(reservation);
+        }
+
+        // GET api/<ReservationController>/5/details
+        [HttpGet("{id:int}/details")]
+        public async Task<IActionResult> GetReservationDetailsAsync(int id)
+        {
+            var reservation = await _reservationService.GetReservationDetailsByIdAsync(id);
+            return Ok(reservation);
+        }
+
+        // GET api/<ReservationController>/hotel/1
+        [HttpGet("hotel/{hotelId:int}")]
+        public async Task<IActionResult> GetReservationsByHotelsAsync(int hotelId)
+        {
+            var reservations = await _reservationService.GetReservationsByHotelIdAsync(hotelId);
+            return Ok(reservations);
+        }
+
+        // GET api/<ReservationController>/user/1
+        [HttpGet("user/{userId:int}")]
+        public async Task<IActionResult> GetReservationsByUsersAsync(int userId)
+        {
+            var reservations = await _reservationService.GetReservationsByUserIdAsync(userId);
+            return Ok(reservations);
+        }
+
+        // GET api/<ReservationController>/hotel/1/2022-09-01/2022-09-15
+        [HttpGet("hotel/{hotelId:int}/{startDate}/{endDate}")]
+        public async Task<IActionResult> GetReservationsByHotelAndDatesAsync(int hotelId, DateTime startDate, DateTime endDate)
+        {
+            var reservations = await _reservationService.GetReservationsByHotelIdAndDatesAsync(hotelId, startDate, endDate);
+            return Ok(reservations);
         }
 
         // POST api/<ReservationController>

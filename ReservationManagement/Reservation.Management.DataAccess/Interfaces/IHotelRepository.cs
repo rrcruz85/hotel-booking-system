@@ -4,6 +4,6 @@ namespace Reservation.Management.DataAccess.Interfaces
 {
     public interface IHotelRepository : IRepository<Entities.Hotel>
     {
-         
+        
     }
 }

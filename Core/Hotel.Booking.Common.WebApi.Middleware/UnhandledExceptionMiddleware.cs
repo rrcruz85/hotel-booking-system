@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace Hotel.Management.WebApi.Middleware
+namespace Hotel.Booking.Common.WebApi.Middleware
 {
     public static class UnhandledExceptionMiddleware
     {

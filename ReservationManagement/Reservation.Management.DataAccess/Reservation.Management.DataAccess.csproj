@@ -27,6 +27,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Constant\Hotel.Booking.Common.Constant.csproj" />
     <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Contract.EfImpl\Hotel.Booking.Common.Contract.EfImpl.csproj" />
     <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Contract\Hotel.Booking.Common.Contract.csproj" />
   </ItemGroup>

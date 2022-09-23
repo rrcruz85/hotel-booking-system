@@ -10,6 +10,6 @@ namespace Reservation.Management.DataAccess.Entities
         public decimal? DiscountPrice { get; set; }
         public int ReservationId { get; set; }
         public virtual Reservation Reservation { get; set; } = null!;
-        public virtual Room ReservationNavigation { get; set; } = null!;
+        public virtual Room Room { get; set; } = null!;
     }
 }

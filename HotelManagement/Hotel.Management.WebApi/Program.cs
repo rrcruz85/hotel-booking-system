@@ -1,6 +1,6 @@
+using Hotel.Booking.Common.WebApi.Middleware;
 using Hotel.Management.DataAccess;
 using Hotel.Management.WebApi.Extensions;
-using Hotel.Management.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var configBuilder = builder.Configuration.SetBasePath(Directory.GetCurrentDirectory()).AddEnvironmentVariables().AddJsonFile("appsettings.json", optional: true);
