@@ -1,9 +1,11 @@
 ﻿using Hotel.Booking.Common.Contract.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace Hotel.Booking.Common.Contract.EfImpl
 {
+    [ExcludeFromCodeCoverage]
     public class GenericRepository<TEFEntity> : IRepository<TEFEntity>, IDisposable
        where TEFEntity : class, IEntity, new()
     {

@@ -17,7 +17,6 @@ namespace Reservation.Management.DataAccess.Entities
         public string UserName { get; set; } = null!;
         public string Passoword { get; set; } = null!;
         public bool IsActive { get; set; }
-
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Reservation> Reservations { get; set; }
         public virtual ICollection<UserProfile> UserProfiles { get; set; }

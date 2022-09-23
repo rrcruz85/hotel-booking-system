@@ -1,9 +1,11 @@
 ﻿
 using Hotel.Booking.Common.Contract.Messaging;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace Hotel.Booking.Common.Messaging
 {
+    [ExcludeFromCodeCoverage]
     public class MessagingEngine : IMessagingEngine
     {
         private readonly IMessagingBroker _messagingBroker;

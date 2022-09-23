@@ -1,9 +1,11 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Hotel.Booking.Common.Contract.Messaging;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Booking.Common.Messaging
 {
+    [ExcludeFromCodeCoverage]
     public class ServiceBusMessagingBroker : IMessagingBroker
     {
         private readonly IConfiguration _config;

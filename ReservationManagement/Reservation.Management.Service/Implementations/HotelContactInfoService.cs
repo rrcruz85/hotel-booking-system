@@ -2,9 +2,11 @@
 using Reservation.Management.Model;
 using Reservation.Management.Service.Interfaces;
 using Reservation.Management.Service.Translators;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reservation.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelContactInfoService : IHotelContactInfoService
     {
         private readonly IHotelContactInfoRepository _hotelContactInfoRepository;

@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Hotel.Booking.Common.Service
 {
+    [ExcludeFromCodeCoverage]
     public class BlobStorageService : IBlobStorageService
     {
         private readonly CloudBlobClient _blobClient;

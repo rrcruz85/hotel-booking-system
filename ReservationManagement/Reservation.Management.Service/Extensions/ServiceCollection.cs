@@ -5,9 +5,11 @@ using Hotel.Booking.Common.Service;
 using Reservation.Management.Service.Implementations;
 using Reservation.Management.Service.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reservation.Management.Service.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollection
     {
         public static void AddBusinessServices(this IServiceCollection service)
@@ -21,6 +23,10 @@ namespace Reservation.Management.Service.Extensions
             service.AddScoped<IHotelService, HotelService>();
             service.AddScoped<IServicesForHotelService, ServicesForHotelService>();
             service.AddScoped<IRoomService, RoomService>();
+            service.AddScoped<IReservationRuleService, ReservationRuleService>();
+            service.AddScoped<IReservationService, ReservationService>();
+            service.AddScoped<IUserService, UserService>();
+
             // Messaging
             service.AddScoped<IMessagingBroker, ServiceBusMessagingBroker>();
             service.AddScoped<IMessagingEngine, MessagingEngine>();

@@ -5,11 +5,13 @@ using Hotel.Booking.Common.Service;
 using Hotel.Management.Service.Implementations;
 using Hotel.Management.Service.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Extensions
 {
     public static class ServiceCollection
     {
+        [ExcludeFromCodeCoverage]
         public static void AddBusinessServices(this IServiceCollection service)
         {
             service.AddScoped<ICityService, CityService>();

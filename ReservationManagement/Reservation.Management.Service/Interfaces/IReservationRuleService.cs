@@ -7,6 +7,6 @@ namespace Reservation.Management.Service.Interfaces
     {
         Task<bool> CheckRoomsAvailabiltyAsync(IReservationContext reservation);
         Task<IReservationRuleValidationResponse> CheckRulesOnCreateAsync(IReservationContext reservation);
-        Task<IReservationRuleValidationResponse> CheckRulesOnUpdateAsync(IEditReservationContext reservation);
+        Task<IReservationRuleValidationResponse> CheckRulesOnUpdateAsync(IReservationContext reservation);
     }
 }

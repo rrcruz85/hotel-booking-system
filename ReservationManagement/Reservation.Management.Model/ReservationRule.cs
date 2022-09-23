@@ -3,6 +3,7 @@ namespace Reservation.Management.Model
 {
     public interface IReservationContext
     {
+        public int ReservationId { get; }
         public int HotelId { get; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
@@ -19,10 +20,5 @@ namespace Reservation.Management.Model
     {
         public bool Ok { get; set; }
         public string Message { get; set; }
-    }
-
-    public interface IEditReservationContext : IReservationContext
-    {
-        public int ReservationId { get; set; }       
     }
 }

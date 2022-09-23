@@ -11,6 +11,7 @@ namespace Hotel.Booking.Common.Constant
         Booked = 1,
         OnGoing,
         Payed,
-        Canceled
+        Canceled,
+        Deleted
     }
 }

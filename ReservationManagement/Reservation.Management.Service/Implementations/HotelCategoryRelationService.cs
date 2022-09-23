@@ -1,8 +1,10 @@
 ﻿using Reservation.Management.DataAccess.Interfaces;
 using Reservation.Management.Service.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reservation.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelCategoryRelationService : IHotelCategoryRelationService
     {
         private readonly IHotelCategoryRelationRepository _hotelCategoryRelationRepository;

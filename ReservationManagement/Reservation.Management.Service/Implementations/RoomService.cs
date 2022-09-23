@@ -6,7 +6,7 @@ using Reservation.Management.Service.Interfaces;
 using Reservation.Management.Service.Translators;
 using Microsoft.Extensions.Configuration;
 
-namespace Hotel.Management.Service.Implementations
+namespace Reservation.Management.Service.Implementations
 {
     public class RoomService : IRoomService
     {

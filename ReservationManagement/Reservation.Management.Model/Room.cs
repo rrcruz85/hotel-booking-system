@@ -12,4 +12,5 @@ namespace Reservation.Management.Model
         public int Type { get; set; }
         public int? Floor { get; set; }
     }
+   
 }

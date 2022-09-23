@@ -1,9 +1,11 @@
 ﻿using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.DataAccess.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.DataAccess.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollection
     {
         public static void AddRepositories(this IServiceCollection services)

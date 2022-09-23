@@ -33,15 +33,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.WebApi.Mid
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Management.WebApi", "HotelManagement\Hotel.Management.WebApi\Hotel.Management.WebApi.csproj", "{10E5E629-6F8E-4C78-B1C8-52138D33C932}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Management.DataAccess", "ReservationManagement\Reservation.Management.DataAccess\Reservation.Management.DataAccess.csproj", "{2E90C619-15CF-4F75-80AC-150181B94079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservation.Management.DataAccess", "ReservationManagement\Reservation.Management.DataAccess\Reservation.Management.DataAccess.csproj", "{2E90C619-15CF-4F75-80AC-150181B94079}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Management.WebApi", "ReservationManagement\Reservation.Management.WebApi\Reservation.Management.WebApi.csproj", "{78A58450-F5E7-4D40-B164-CD94C20DF304}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservation.Management.WebApi", "ReservationManagement\Reservation.Management.WebApi\Reservation.Management.WebApi.csproj", "{78A58450-F5E7-4D40-B164-CD94C20DF304}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Management.Event.Processor", "ReservationManagement\Reservation.Management.Event.Processor\Reservation.Management.Event.Processor.csproj", "{51AB8166-5E80-4938-80D0-B8DC65F4829D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservation.Management.Event.Processor", "ReservationManagement\Reservation.Management.Event.Processor\Reservation.Management.Event.Processor.csproj", "{51AB8166-5E80-4938-80D0-B8DC65F4829D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Management.Service", "ReservationManagement\Reservation.Management.Service\Reservation.Management.Service.csproj", "{170A79D8-5BE4-4AA3-BB32-B9085B10E450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservation.Management.Service", "ReservationManagement\Reservation.Management.Service\Reservation.Management.Service.csproj", "{170A79D8-5BE4-4AA3-BB32-B9085B10E450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Management.Model", "ReservationManagement\Reservation.Management.Model\Reservation.Management.Model.csproj", "{05A39B4B-16A9-4A55-80DD-C58C2C7C8F75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservation.Management.Model", "ReservationManagement\Reservation.Management.Model\Reservation.Management.Model.csproj", "{05A39B4B-16A9-4A55-80DD-C58C2C7C8F75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Management.Service.Tests", "ReservationManagement\Reservation.Management.Service.Tests\Reservation.Management.Service.Tests.csproj", "{28A2B2AD-0EBC-4823-9025-79E0FFED6A24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,10 @@ Global
 		{05A39B4B-16A9-4A55-80DD-C58C2C7C8F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05A39B4B-16A9-4A55-80DD-C58C2C7C8F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05A39B4B-16A9-4A55-80DD-C58C2C7C8F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28A2B2AD-0EBC-4823-9025-79E0FFED6A24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28A2B2AD-0EBC-4823-9025-79E0FFED6A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28A2B2AD-0EBC-4823-9025-79E0FFED6A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28A2B2AD-0EBC-4823-9025-79E0FFED6A24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +140,7 @@ Global
 		{51AB8166-5E80-4938-80D0-B8DC65F4829D} = {AA3CB582-0647-4836-BD9D-5E9889553985}
 		{170A79D8-5BE4-4AA3-BB32-B9085B10E450} = {AA3CB582-0647-4836-BD9D-5E9889553985}
 		{05A39B4B-16A9-4A55-80DD-C58C2C7C8F75} = {AA3CB582-0647-4836-BD9D-5E9889553985}
+		{28A2B2AD-0EBC-4823-9025-79E0FFED6A24} = {AA3CB582-0647-4836-BD9D-5E9889553985}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B80A5646-3DA3-4AA8-B85E-D50493CE1F9D}
