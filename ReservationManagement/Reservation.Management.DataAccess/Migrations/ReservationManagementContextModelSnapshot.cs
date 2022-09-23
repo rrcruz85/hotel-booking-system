@@ -344,9 +344,7 @@ namespace Reservation.Management.DataAccess.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReservationId");
+                    b.HasKey("Id");                  
 
                     b.ToTable("Reservation_History", (string)null);
                 });
@@ -683,17 +681,6 @@ namespace Reservation.Management.DataAccess.Migrations
                         .HasConstraintName("FK_Reservation_User");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Reservation.Management.DataAccess.Entities.ReservationHistory", b =>
-                {
-                    b.HasOne("Reservation.Management.DataAccess.Entities.Reservation", "Reservation")
-                        .WithMany("ReservationHistories")
-                        .HasForeignKey("ReservationId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Reservation_History");
-
-                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("Reservation.Management.DataAccess.Entities.RolePermission", b =>

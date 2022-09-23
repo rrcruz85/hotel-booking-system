@@ -16,7 +16,12 @@ namespace Reservation.Management.WebApi.Translator
                 Observations = reservation.Observations,
                 PaymentMethodInfo = reservation.PaymentMethodInfo,
                 PaymentMethodType = reservation.PaymentMethodType,
-                UserId = reservation.UserId
+                UserId = reservation.UserId,
+                Rooms = reservation.Rooms.Select(r => new CreateUpdateRoomReservation { 
+                   DiscountPrice = r.DiscountPrice,
+                   Price = r.Price,
+                   RoomId = r.RoomId                
+                }).ToList(),
             };
         }
 

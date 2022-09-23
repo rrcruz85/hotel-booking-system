@@ -27,16 +27,16 @@ namespace Reservation.Management.Service.Tests.ReservationService
             Assert.ThrowsAsync<ArgumentException>(() => _sut.DeleteReservationAsync(_reservationContext.ReservationId, 1));
         }
 
-        [Test]
-        public void When_ValidationsAreOk_Then_ReservationIsDeleted_And_ReservationHistoryIsUpdated()
-        {            
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(p => p.Id == _reservationContext.ReservationId)).ReturnsAsync(_reservationEntity);
+        //[Test]
+        //public void When_ValidationsAreOk_Then_ReservationIsDeleted_And_ReservationHistoryIsUpdated()
+        //{            
+        //    _reservationRepository.Setup(m => m.FirstOrDefaultAsync(p => p.Id == _reservationContext.ReservationId)).ReturnsAsync(_reservationEntity);
             
-            Assert.DoesNotThrowAsync(() => _sut.DeleteReservationAsync(_reservationContext.ReservationId, 1));
+        //    Assert.DoesNotThrowAsync(() => _sut.DeleteReservationAsync(_reservationContext.ReservationId, 1));
 
-            _reservationRepository.Verify(m => m.DeleteAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
-            _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Once);
+        //    _reservationRepository.Verify(m => m.DeleteAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
+        //    _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Once);
 
-        }
+        //}
     }
 }

@@ -4,6 +4,6 @@ namespace Reservation.Management.DataAccess.Interfaces
 {
     public interface IReservationRepository : IRepository<Entities.Reservation>
     {
-
+        Task<Entities.Reservation?> GetWithRelationsAsync(int id);
     }
 }

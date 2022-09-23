@@ -267,13 +267,7 @@ namespace Reservation.Management.DataAccess
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(1024)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Reservation)
-                    .WithMany(p => p.ReservationHistories)
-                    .HasForeignKey(d => d.ReservationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Reservation_History");
+                    .IsUnicode(false);                
             });
 
             modelBuilder.Entity<Role>(entity =>

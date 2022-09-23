@@ -5,7 +5,6 @@ using Reservation.Management.Model;
 using Reservation.Management.Model.Event;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Reservation.Management.Service.Tests.ReservationService
 {
@@ -16,7 +15,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
         [Test]
         public void When_ReservationDoesNotExist_Then_Exception_IsExpected()
         {
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(p => p.Id == _reservationContext.ReservationId)).ReturnsAsync(value: null);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(_reservationContext.ReservationId)).ReturnsAsync(value: null);
 
             Assert.ThrowsAsync<ArgumentException>(() => _sut.UpdateReservationAsync(_reservationContext));
         }
@@ -43,7 +42,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             };
 
             _reservationEntity.Status = (int)ReservationStatus.Canceled;
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(p => p.Id == _reservationContext.ReservationId)).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(_reservationContext.ReservationId)).ReturnsAsync(_reservationEntity);
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(okValidation);
 
             Assert.ThrowsAsync<ArgumentException>(() => _sut.UpdateReservationAsync(_reservationContext));
@@ -57,10 +56,11 @@ namespace Reservation.Management.Service.Tests.ReservationService
                 Ok = true
             };
 
-            _reservationEntity.Status = (int)ReservationStatus.OnGoing;
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(p => p.Id == _reservationContext.ReservationId)).ReturnsAsync(_reservationEntity);
+            _reservationEntity.StartDate = DateTime.Now.AddDays(-1);
+
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(_reservationContext.ReservationId)).ReturnsAsync(_reservationEntity);
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(okValidation);
-            _reservationContext.StartDate = DateTime.Now.AddDays(-1);
+            _reservationContext.StartDate = DateTime.Now;
 
             Assert.ThrowsAsync<ArgumentException>(() => _sut.UpdateReservationAsync(_reservationContext));
         }
@@ -74,13 +74,13 @@ namespace Reservation.Management.Service.Tests.ReservationService
             };
             _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
 
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             Assert.DoesNotThrowAsync(() => _sut.UpdateReservationAsync(_reservationContext));
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Never);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Booked, It.IsAny<RoomStatusEvent>()), Times.Never);
@@ -96,7 +96,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
 
             _reservationEntity.Status = (int)ReservationStatus.Booked;
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             _reservationContext.Status = (int)ReservationStatus.OnGoing;
 
@@ -104,7 +104,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Once);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Booked, It.IsAny<RoomStatusEvent>()), Times.Never);
@@ -121,7 +121,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
 
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             _reservationContext.Rooms.Add(new CreateUpdateRoomReservation
             {
@@ -133,7 +133,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Once);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Once);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Never);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Booked, It.IsAny<RoomStatusEvent>()), Times.AtLeastOnce);
@@ -157,13 +157,13 @@ namespace Reservation.Management.Service.Tests.ReservationService
                 Price = 200
             });
 
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             Assert.DoesNotThrowAsync(() => _sut.UpdateReservationAsync(_reservationContext));
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Once);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Never);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Available, It.IsAny<RoomStatusEvent>()), Times.AtLeastOnce);
@@ -181,7 +181,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
 
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             _reservationContext.Rooms.Add(new CreateUpdateRoomReservation
             {
@@ -193,7 +193,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Never);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Booked, It.IsAny<RoomStatusEvent>()), Times.Never);
@@ -210,7 +210,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
 
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             _reservationContext.StartDate = DateTime.Now.AddDays(5);
 
@@ -218,7 +218,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Never);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Booked, It.IsAny<RoomStatusEvent>()), Times.Never);
@@ -236,7 +236,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
 
-            _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
+            _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
             _reservationContext.Rooms[0].Price = 200;
 
@@ -244,7 +244,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.Reservation>()), Times.Once);
             _roomReservationRepository.Verify(m => m.DeleteMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
-            _roomReservationRepository.Verify(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>()), Times.Never);
+            _roomReservationRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.Never);
             _roomReservationRepository.Verify(m => m.UpdateAsync(It.IsAny<DataAccess.Entities.RoomReservation>()), Times.AtLeastOnce);
             _reservationHistoryRepository.Verify(m => m.AddAsync(It.IsAny<DataAccess.Entities.ReservationHistory>()), Times.Never);
             _messagingEngine.Verify(m => m.PublishEventMessageAsync("room-events", (int)RoomEventType.Available, It.IsAny<RoomStatusEvent>()), Times.Never);

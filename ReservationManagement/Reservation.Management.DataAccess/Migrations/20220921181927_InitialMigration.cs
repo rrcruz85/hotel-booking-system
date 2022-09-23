@@ -334,12 +334,7 @@ namespace Reservation.Management.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservation_History", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Reservation_History",
-                        column: x => x.ReservationId,
-                        principalTable: "Reservation",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_Reservation_History", x => x.Id);                    
                 });
 
             migrationBuilder.CreateTable(
@@ -447,11 +442,6 @@ namespace Reservation.Management.DataAccess.Migrations
                 name: "NonClusteredIndex-StartDate-EndDate-Status-UserId",
                 table: "Reservation",
                 column: "Status");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservation_History_ReservationId",
-                table: "Reservation_History",
-                column: "ReservationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolePermission_RoleId",

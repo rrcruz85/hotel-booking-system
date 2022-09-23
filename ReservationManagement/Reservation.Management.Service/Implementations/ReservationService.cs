@@ -43,7 +43,7 @@ namespace Reservation.Management.Service.Implementations
                 throw new ArgumentException(validationResult.Message);
             }
 
-            var entity = reservation.ToEntity();
+            var entity = reservation.ToNewEntity();
             var reservationId = await _reservationRepository.AddAsync(entity);
             entity.Id = reservationId;
           
@@ -61,7 +61,7 @@ namespace Reservation.Management.Service.Implementations
             {
                 ReservationId = reservationId,
                 CreatedDateTime = DateTime.Now,
-                Status = reservation.Status,
+                Status = (int)ReservationStatus.Booked,
                 UserId = reservation.UserId
             });
 
@@ -128,7 +128,7 @@ namespace Reservation.Management.Service.Implementations
 
         public async Task UpdateReservationAsync(CreateUpdateReservation reservation)
         {
-            var entity = await _reservationRepository.FirstOrDefaultAsync(c => c.Id == reservation.ReservationId);
+            var entity = await _reservationRepository.GetWithRelationsAsync(reservation.ReservationId);
             if (entity == null)
             {
                 throw new ArgumentException($"Reservation {reservation.ReservationId} does not exist");
@@ -188,12 +188,21 @@ namespace Reservation.Management.Service.Implementations
             // new booked rooms
             if (newRooms.Any())
             {
-                var roomReservations = entity.RoomReservations.Where(r => newRooms.Contains(r.RoomId)).ToList();
-                await _roomReservationRepository.AddMultipleAsync(roomReservations);
-                foreach (var @event in newRooms.Select(roomId => new RoomStatusEvent { RoomId = roomId, Status = (int)RoomStatus.Booked}).ToList())
+                foreach(var roomId in newRooms)
                 {
+                    var @room = reservation.Rooms.FirstOrDefault(r => r.RoomId == roomId);
+                    var roomReservation = new DataAccess.Entities.RoomReservation 
+                    { 
+                        DiscountPrice = @room.DiscountPrice,
+                        Price = @room.Price,
+                        ReservationId = reservation.ReservationId,
+                        RoomId = roomId,
+                    };
+
+                    await _roomReservationRepository.AddAsync(roomReservation);
+                    var @event = new RoomStatusEvent { RoomId = roomId, Status = (int)RoomStatus.Booked };
                     await _messagingEngine.PublishEventMessageAsync(_config[RoomTopicName], (int)RoomEventType.Booked, @event);
-                }
+                }                
             }
 
             // Updating price and discount

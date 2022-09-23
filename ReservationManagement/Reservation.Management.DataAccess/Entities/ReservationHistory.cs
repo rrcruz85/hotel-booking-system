@@ -12,7 +12,5 @@ namespace Reservation.Management.DataAccess.Entities
         public int UserId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string? Description { get; set; }
-
-        public virtual Reservation Reservation { get; set; } = null!;
     }
 }
