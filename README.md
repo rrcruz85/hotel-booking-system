@@ -48,3 +48,11 @@ In order to communicate microservices between themselves and keeping data consis
    - Azure Blob Storage
    - Azure Sql DB
    - Azure Load Balancer & Azure App Server
+
+## Running Locally:
+1. You will need to create the 3 SQL DBs and then run all the migrations from cli by executing:
+   - dotnet ef database update
+2. Then you will need to run each project, webapis and azure functions, to do so, it is a requirement to have an azure subscription account. 
+     
+## Final observation:
+1. WebApis are not secured at this moment, so in future at least one mechanism of security should be implemented (oauth, identity, azure key vault, etc)
