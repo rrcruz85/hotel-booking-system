@@ -1,8 +1,10 @@
 ﻿
 using Hotel.Management.DataAccess.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Translators
 {
+    [ExcludeFromCodeCoverage]
     public static class CityTranslator
     {
         public static City ToNewEntity(this Model.City city)

@@ -10,8 +10,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Constant\Hotel.Booking.Common.Constant.csproj" />
-    <ProjectReference Include="..\Reservation.Management.Model\Reservation.Management.Model.csproj" />
-    <ProjectReference Include="..\Reservation.Management.Service\Reservation.Management.Service.csproj" />
+    <ProjectReference Include="..\UserAccount.Management.Model\UserAccount.Management.Model.csproj" />
+    <ProjectReference Include="..\UserAccount.Management.Service\UserAccount.Management.Service.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -20,6 +20,9 @@ namespace Reservation.Management.Event.Processor
             builder.Services.AddScoped<IRoomEventProcessor, RoomEventProcessor>();
             builder.Services.AddScoped<ICityEventProcessor, CityEventProcessor>();
             builder.Services.AddScoped<IHotelEventProcessor, HotelEventProcessor>();
+            builder.Services.AddScoped<IHotelCategoryEventProcessor, HotelCategoryEventProcessor>();
+            builder.Services.AddScoped<IUserEventProcessor, UserEventProcessor>();
+            builder.Services.AddScoped<IUserProfileEventProcessor, UserProfileEventProcessor>();
         }
     }
 }

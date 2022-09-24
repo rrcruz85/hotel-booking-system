@@ -26,6 +26,7 @@ namespace Reservation.Management.Service.Extensions
             service.AddScoped<IReservationRuleService, ReservationRuleService>();
             service.AddScoped<IReservationService, ReservationService>();
             service.AddScoped<IUserService, UserService>();
+            service.AddScoped<IUserProfileService, UserProfileService>();
             service.AddScoped<ISearchService, SearchService>();            
 
             // Messaging

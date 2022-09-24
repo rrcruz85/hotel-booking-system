@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Constant\Hotel.Booking.Common.Constant.csproj" />
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Contract.EfImpl\Hotel.Booking.Common.Contract.EfImpl.csproj" />
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Contract\Hotel.Booking.Common.Contract.csproj" />
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Messaging\Hotel.Booking.Common.Messaging.csproj" />
+    <ProjectReference Include="..\..\Core\Hotel.Booking.Common.Service\Hotel.Booking.Common.Service.csproj" />
+    <ProjectReference Include="..\UserAccount.Management.DataAccess\UserAccount.Management.DataAccess.csproj" />
+    <ProjectReference Include="..\UserAccount.Management.Model\UserAccount.Management.Model.csproj" />
+  </ItemGroup>
+
+</Project>

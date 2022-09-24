@@ -56,6 +56,41 @@ namespace Hotel.Booking.Common.Constant
         Deleted
     }
 
+    public enum UserEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum UserProfileEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum UserContactInfoEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum RoleEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
+    public enum RolePermissionEventType
+    {
+        Created = 1,
+        Updated,
+        Deleted
+    }
+
     public enum RoomEventType
     {
         Created = 1,
