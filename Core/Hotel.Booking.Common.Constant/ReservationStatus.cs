@@ -14,4 +14,11 @@ namespace Hotel.Booking.Common.Constant
         Canceled,
         Deleted
     }
+
+    public enum InvoiceStatus
+    {
+        Issued = 1,
+        Payed,
+        Canceled,
+    }
 }
