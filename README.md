@@ -51,9 +51,19 @@ In order to communicate microservices between themselves and keeping data consis
    - Azure Load Balancer & Azure App Server
 
 ## Running Locally:
-1. You will need to create the 3 SQL DBs and then run in each of them all the migrations from cli by executing:
-   - dotnet ef database update
-2. You will need to run each project, webapis and azure functions, to do so, it is a requirement to have an azure subscription account. 
+1. You will need to create the 3 SQL DBs in your local server:
+   - HotelManagement
+   - ReservationManagement
+   - UserAccountManagement   
+   In each of these databases you will need to run all the migrations from command line by executing:
+
+      `dotnet ef database update`   
+    
+2. In order to have a proper functionning all the webapi and azure function projects needs to be running at the same time, so you will need to update the solution by setting multiple startup projects.
+       
+   ![alt text](local-multiple-startup.png)
+   
+3. Additionally it is a requirement to have an azure subscription account where you have azure service bus services up and running. Once you have your subscription account set you will need to update in the webapi projects the **appsettings.Development.json** file and in the azure functions projects the **local.settings.json** the app settings keys: **BlobStorageConnectionString**, **EventMessageConnectionString** and DB connection string in each microservice: **HotelManagement**, **ReservationManagement** or **UserAccountManagement**.
      
 ## Final observation:
 1. WebApis are not secured at this moment, so in future at least one mechanism of security should be implemented (oauth, identity, azure key vault, etc)

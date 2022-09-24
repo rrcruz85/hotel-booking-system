@@ -2,7 +2,7 @@
   "profiles": {
     "Reservation.Management.Event.Processor": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7072",
+      "commandLineArgs": "--port 7085",
       "launchBrowser": false
     }
   }
