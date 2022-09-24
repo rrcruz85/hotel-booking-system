@@ -156,6 +156,11 @@ namespace UserAccount.Management.DataAccess
                     .HasConstraintName("FK_UserProfile_User");
             });
 
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "Customer" });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "Manager" });
+            modelBuilder.Entity<User>().HasData(new User { Id = 1, IsActive = true, Password = "123456", UserName = "user", RoleId = 1 });
+
+
             OnModelCreatingPartial(modelBuilder);
         }
 

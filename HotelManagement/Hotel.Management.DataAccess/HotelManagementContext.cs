@@ -192,6 +192,14 @@ namespace Hotel.Management.DataAccess
                     .HasConstraintName("FK_Room_Hotel");
             });
 
+            modelBuilder.Entity<City>().HasData(new City { Id = 1, Country = "Mexico", State = "Merida", Name = "Cancum"});
+            modelBuilder.Entity<Entities.Hotel>().HasData(new Entities.Hotel { Id = 1, Name = "Grand Carribean", AddressLine1 = "Street 1",  CityId = 1 });
+            modelBuilder.Entity<Room>().HasData(new Room { Id = 1, HotelId = 1, Number = 101, MaxCapacity = 2, Floor =1, Status =1, CurrentPrice = 50, Type = 1 });
+            modelBuilder.Entity<Room>().HasData(new Room { Id = 2, HotelId = 1, Number = 102, MaxCapacity = 4, Floor = 1, Status = 1, CurrentPrice = 100, Type = 2 });
+            modelBuilder.Entity<Room>().HasData(new Room { Id = 3, HotelId = 1, Number = 103, MaxCapacity = 4, Floor = 1, Status = 1, CurrentPrice = 150, Type = 2 });
+            modelBuilder.Entity<Room>().HasData(new Room { Id = 4, HotelId = 1, Number = 106, MaxCapacity = 6, Floor = 1, Status = 1, CurrentPrice = 200, Type = 3 });
+            modelBuilder.Entity<Room>().HasData(new Room { Id = 5, HotelId = 1, Number = 107, MaxCapacity = 6, Floor = 1, Status = 1, CurrentPrice = 250, Type = 3 });
+
             OnModelCreatingPartial(modelBuilder);
         }
 

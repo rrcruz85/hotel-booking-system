@@ -47,6 +47,11 @@ namespace Reservation.Management.Service.Implementations
         {
             var response = CheckCommonRules(reservation);
 
+            if (!response.Ok)
+            {
+                return response;
+            }
+
             var minStartDate = DateTime.Now.AddDays(ReservationMinStartDaysLimit);
             if (reservation.StartDate <= minStartDate)
             {
@@ -68,7 +73,10 @@ namespace Reservation.Management.Service.Implementations
         public async Task<IReservationRuleValidationResponse> CheckRulesOnUpdateAsync(IReservationContext reservation)
         {
             var response = CheckCommonRules(reservation);
-
+            if (!response.Ok)
+            {
+                return response;
+            }
             var roomsAreAvailable = await CheckRoomsAvailabiltyAsync(reservation);
             if (!roomsAreAvailable)
             {
