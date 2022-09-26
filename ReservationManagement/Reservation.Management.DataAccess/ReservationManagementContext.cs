@@ -37,8 +37,11 @@ namespace Reservation.Management.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // connect to sql server with connection string from app settings
-            options.UseSqlServer(_config.GetConnectionString("ReservationManagement"));
+            if (!options.IsConfigured)
+            {
+                // connect to sql server with connection string from app settings
+                options.UseSqlServer(_config.GetConnectionString("ReservationManagement"));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

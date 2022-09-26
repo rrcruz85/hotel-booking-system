@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="MockQueryable.Moq" Version="6.0.1" />
     <PackageReference Include="Moq" Version="4.18.2" />
@@ -21,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reservation.Management.Service\Reservation.Management.Service.csproj" />
+    <ProjectReference Include="..\Reservation.Management.WebApi\Reservation.Management.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
