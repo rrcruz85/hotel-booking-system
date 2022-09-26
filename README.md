@@ -31,6 +31,9 @@ Each of these microservices is a rest webapi app built following a layered archi
 
 In order to communicate microservices between themselves and keeping data consistency in each of the microservice databases, a publish/subscriber messagging pattern was implemented by using Azure Service Bus as messaging broker system with topics where event messages are sent and Azure Functions acting as topic subscribers to process events. For image storage Azure Blob Storage was implemented.
 
+## Webapi endpoints definitions per microservice:
+In each microservice under: **/swagger/index.html** you can find all the available endpoints.
+
 ## Architecture High Level Diagram:
 ![alt text](architecture-overview.png)
 
