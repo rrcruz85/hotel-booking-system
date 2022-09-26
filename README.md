@@ -67,6 +67,13 @@ In each microservice under: **/swagger/index.html** you can find all the availab
    ![alt text](local-multiple-startup.png)
    
 3. Additionally it is a requirement to have an azure subscription account where you have azure service bus services up and running. Once you have your subscription account set you will need to update in the webapi projects the **appsettings.Development.json** file and in the azure functions projects the **local.settings.json** the app settings keys: **BlobStorageConnectionString**, **EventMessageConnectionString** and DB connection string in each microservice: **HotelManagement**, **ReservationManagement** or **UserAccountManagement**.
-     
+
+## Tests:
+Both Unit tests and Integration tests were created to validate proper rule validations and functioning, by running from cli:
+
+  `dotnet test`  
+All tests are executed and validated.
+
 ## Final observation:
 1. WebApis are not secured at this moment, so in future at least one mechanism of security should be implemented (oauth, identity, azure key vault, etc)
+
