@@ -1,24 +1,26 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class RoomService : IRoomService
     {
         private readonly IRoomRepository _roomRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "RoomTopicName";
 
         public RoomService(
             IRoomRepository roomRepository, 
             IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IConfigurationView config)
         {
             _roomRepository = roomRepository;
             _messagingEngine = messagingEngine;
@@ -35,7 +37,7 @@ namespace Hotel.Management.Service.Implementations
             newEntity.Status = (int)RoomStatus.Available;
             var roomId = await _roomRepository.AddAsync(newEntity);
             newEntity.Id = roomId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)RoomEventType.Created, newEntity);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RoomEventType.Created, newEntity);
             return roomId;
         }
 
@@ -47,7 +49,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Room {roomId} does not exist");
             }
             await _roomRepository.DeleteAsync(room);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)RoomEventType.Deleted, roomId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RoomEventType.Deleted, roomId);
         }
 
         public async Task<List<Room>> GetAllRoomsByHotelIdAsync(int hotelId)
@@ -122,7 +124,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Room number can not be duplicated");
             }
             await _roomRepository.UpdateAsync(room.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)RoomEventType.Updated, room);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RoomEventType.Updated, room);
         }
 
         public async Task UpdateRoomStatusAsync(int roomId, int status)

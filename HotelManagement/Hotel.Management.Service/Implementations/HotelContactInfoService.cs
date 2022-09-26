@@ -1,24 +1,26 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelContactInfoService : IHotelContactInfoService
     {
         private readonly IHotelContactInfoRepository _hotelContactInfoRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "HotelContactInfoTopicName";
 
         public HotelContactInfoService(
             IHotelContactInfoRepository hotelContactInfoRepository, 
-            IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IMessagingEngine messagingEngine,
+            IConfigurationView config)
         {
             _hotelContactInfoRepository = hotelContactInfoRepository;
             _messagingEngine = messagingEngine;
@@ -34,7 +36,7 @@ namespace Hotel.Management.Service.Implementations
 
             var contactId = await _hotelContactInfoRepository.AddAsync(contactInfo.ToNewEntity());
             contactInfo.Id = contactId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelContactInfoEventType.Created, contactInfo);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelContactInfoEventType.Created, contactInfo);
             return contactId;
         }
 
@@ -46,7 +48,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel contact info {hotelContactInfoId} does not exist");
             }
             await _hotelContactInfoRepository.DeleteAsync(contact);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelContactInfoEventType.Deleted, hotelContactInfoId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelContactInfoEventType.Deleted, hotelContactInfoId);
 
         }        
 
@@ -96,7 +98,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel Contact info can not be duplicated");
             }
             await _hotelContactInfoRepository.UpdateAsync(contactInfo.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelContactInfoEventType.Updated, contactInfo);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelContactInfoEventType.Updated, contactInfo);
 
         }
     }

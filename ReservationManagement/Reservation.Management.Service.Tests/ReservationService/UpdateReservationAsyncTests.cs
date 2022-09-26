@@ -72,7 +72,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             {
                 Ok = true
             };
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
@@ -93,7 +93,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             {
                 Ok = true
             };
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationEntity.Status = (int)ReservationStatus.Booked;
             _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
@@ -119,7 +119,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             };
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(okValidation);
 
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
@@ -149,7 +149,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(okValidation);
 
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationEntity.RoomReservations.Add(new DataAccess.Entities.RoomReservation
             {
@@ -179,7 +179,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             };
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(failedValidation);
 
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
@@ -208,7 +208,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             };
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(failedValidation);
 
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 
@@ -234,7 +234,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
 
             _reservationRuleService.Setup(m => m.CheckRulesOnUpdateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(okValidation);
 
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationRepository.Setup(m => m.GetWithRelationsAsync(It.IsAny<int>())).ReturnsAsync(_reservationEntity);
 

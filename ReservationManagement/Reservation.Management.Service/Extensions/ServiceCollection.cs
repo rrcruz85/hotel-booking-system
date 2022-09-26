@@ -27,13 +27,16 @@ namespace Reservation.Management.Service.Extensions
             service.AddScoped<IReservationService, ReservationService>();
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<IUserProfileService, UserProfileService>();
-            service.AddScoped<ISearchService, SearchService>();            
+            service.AddScoped<ISearchService, SearchService>();
+            service.AddScoped<IRoleService, RoleService>();
+            service.AddScoped<IRolePermissionService, RolePermissionService>();
 
             // Messaging
             service.AddScoped<IMessagingBroker, ServiceBusMessagingBroker>();
             service.AddScoped<IMessagingEngine, MessagingEngine>();
             // Blob 
             service.AddScoped<IBlobStorageService, BlobStorageService>();
+            service.AddScoped<IConfigurationView, ConfigurationView>();
         }
     }
 }

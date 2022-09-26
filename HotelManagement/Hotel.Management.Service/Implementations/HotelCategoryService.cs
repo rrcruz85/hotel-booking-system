@@ -1,24 +1,26 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelCategoryService : IHotelCategoryService
     {
         private readonly IHotelCategoryRepository _hotelCategoryRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "HotelCategoryTopicName";
 
         public HotelCategoryService(
             IHotelCategoryRepository hotelCategoryRepository, 
-            IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IMessagingEngine messagingEngine,
+            IConfigurationView config)
         {
             _hotelCategoryRepository = hotelCategoryRepository;
             _messagingEngine = messagingEngine;
@@ -34,7 +36,7 @@ namespace Hotel.Management.Service.Implementations
 
             var categoryId = await _hotelCategoryRepository.AddAsync(category.ToNewEntity());
             category.Id = categoryId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Created, category);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelCategoryEventType.Created, category);
             return categoryId;
         }
 
@@ -46,7 +48,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel category {hotelCategoryId} does not exist");
             }
             await _hotelCategoryRepository.DeleteAsync(city);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Deleted, hotelCategoryId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelCategoryEventType.Deleted, hotelCategoryId);
         }
 
         public async Task<List<HotelCategory>> GetHotelCategoriesByHotelAsync(int hotelId)
@@ -73,7 +75,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel Category name can not be duplicated");
             }
             await _hotelCategoryRepository.UpdateAsync(category.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Updated, category);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelCategoryEventType.Updated, category);
         }
     }
 }

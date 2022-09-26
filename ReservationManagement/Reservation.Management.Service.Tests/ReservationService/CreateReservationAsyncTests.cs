@@ -33,7 +33,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             {
                 Ok = true
             };
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
             _reservationRuleService.Setup(m => m.CheckRulesOnCreateAsync(It.IsAny<IReservationContext>())).ReturnsAsync(okValidation);
             _reservationRepository.Setup(m => m.AddAsync(It.IsAny<DataAccess.Entities.Reservation>())).ReturnsAsync(_reservationContext.ReservationId);
             _roomReservationRepository.Setup(m => m.AddMultipleAsync(It.IsAny<List<DataAccess.Entities.RoomReservation>>())).Verifiable();

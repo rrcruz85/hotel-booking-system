@@ -26,6 +26,7 @@ namespace UserAccount.Management.Service.Extensions
             service.AddScoped<IMessagingEngine, MessagingEngine>();
             // Blob 
             service.AddScoped<IBlobStorageService, BlobStorageService>();
+            service.AddScoped<IConfigurationView, ConfigurationView>();
         }
     }
 }

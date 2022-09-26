@@ -3,9 +3,9 @@ using Hotel.Booking.Common.Contract.Messaging;
 using Reservation.Management.DataAccess.Interfaces;
 using Reservation.Management.Model;
 using Reservation.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
 using Reservation.Management.Service.Interfaces;
 using Reservation.Management.Model.Event;
+using Hotel.Booking.Common.Contract.Services;
 
 namespace Reservation.Management.Service.Implementations
 {
@@ -16,7 +16,7 @@ namespace Reservation.Management.Service.Implementations
         private readonly IReservationHistoryRepository _reservationHistoryRepository;
         private readonly IRoomReservationRepository _roomReservationRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string RoomTopicName = "RoomTopicName";       
 
         public ReservationService(
@@ -25,7 +25,7 @@ namespace Reservation.Management.Service.Implementations
             IReservationHistoryRepository reservationHistoryRepository,
             IRoomReservationRepository roomReservationRepository,
             IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IConfigurationView config)
         {
             _reservationRuleService = reservationRuleService;
             _reservationRepository = reservationRepository;
@@ -67,7 +67,7 @@ namespace Reservation.Management.Service.Implementations
 
             foreach (var @event in reservation.Rooms.Select(r => new RoomStatusEvent { RoomId = r.RoomId, Status = (int)RoomStatus.Booked}).ToList())
             {
-                await _messagingEngine.PublishEventMessageAsync(_config[RoomTopicName], (int)RoomEventType.Booked, @event);
+                await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(RoomTopicName), (int)RoomEventType.Booked, @event);
             }
 
             return reservationId;
@@ -101,7 +101,7 @@ namespace Reservation.Management.Service.Implementations
 
             foreach (var @event in entity.RoomReservations.Select(r => new RoomStatusEvent{ RoomId = r.RoomId, Status = (int)RoomStatus.Available }).ToList())
             {
-                await _messagingEngine.PublishEventMessageAsync(_config[RoomTopicName], (int)RoomEventType.Available, @event);
+                await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(RoomTopicName), (int)RoomEventType.Available, @event);
             }            
         }
 
@@ -190,7 +190,7 @@ namespace Reservation.Management.Service.Implementations
                 await _roomReservationRepository.DeleteMultipleAsync(roomReservations);
                 foreach(var @event in removedRooms.Select(roomId => new RoomStatusEvent { RoomId = roomId , Status = (int)RoomStatus.Available}).ToList())
                 {
-                    await _messagingEngine.PublishEventMessageAsync(_config[RoomTopicName], (int)RoomEventType.Available, @event);
+                    await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(RoomTopicName), (int)RoomEventType.Available, @event);
                 }
             }
 
@@ -210,7 +210,7 @@ namespace Reservation.Management.Service.Implementations
 
                     await _roomReservationRepository.AddAsync(roomReservation);
                     var @event = new RoomStatusEvent { RoomId = roomId, Status = (int)RoomStatus.Booked };
-                    await _messagingEngine.PublishEventMessageAsync(_config[RoomTopicName], (int)RoomEventType.Booked, @event);
+                    await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(RoomTopicName), (int)RoomEventType.Booked, @event);
                 }                
             }
 

@@ -4,7 +4,7 @@ using Reservation.Management.DataAccess.Interfaces;
 using Reservation.Management.Model;
 using Reservation.Management.Service.Interfaces;
 using Reservation.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using Hotel.Booking.Common.Contract.Services;
 
 namespace Reservation.Management.Service.Implementations
 {
@@ -12,13 +12,13 @@ namespace Reservation.Management.Service.Implementations
     {
         private readonly IRoomRepository _roomRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "RoomTopicName";
 
         public RoomService(
             IRoomRepository roomRepository, 
             IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IConfigurationView config)
         {
             _roomRepository = roomRepository;
             _messagingEngine = messagingEngine;
@@ -86,7 +86,7 @@ namespace Reservation.Management.Service.Implementations
                 throw new ArgumentException($"Room number can not be duplicated");
             }
             await _roomRepository.UpdateAsync(room.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)RoomEventType.Updated, room);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RoomEventType.Updated, room);
         }
 
         public async Task UpdateRoomStatusAsync(int roomId, int status)
@@ -98,7 +98,7 @@ namespace Reservation.Management.Service.Implementations
             }
             entity.Status = status;
             await _roomRepository.UpdateAsync(entity);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], status, entity);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), status, entity);
         }
     }
 }

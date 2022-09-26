@@ -1,24 +1,26 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelFacilityService : IHotelFacilityService
     {
         private readonly IHotelFacilityRepository _hotelFacilityRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "HotelFacilityTopicName";
 
         public HotelFacilityService(
             IHotelFacilityRepository hotelFacilityRepository, 
-            IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IMessagingEngine messagingEngine,
+            IConfigurationView config)
         {
             _hotelFacilityRepository = hotelFacilityRepository;
             _messagingEngine = messagingEngine;
@@ -34,7 +36,7 @@ namespace Hotel.Management.Service.Implementations
 
             var facilityId = await _hotelFacilityRepository.AddAsync(hotelFacility.ToNewEntity());
             hotelFacility.Id = facilityId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Created, hotelFacility);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelFacilityEventType.Created, hotelFacility);
             return facilityId;
         }
 
@@ -46,7 +48,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel facility {hotelFacilityId} does not exist");
             }
             await _hotelFacilityRepository.DeleteAsync(facility);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Deleted, hotelFacilityId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelFacilityEventType.Deleted, hotelFacilityId);
 
         }         
 
@@ -74,7 +76,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel facility name can not be duplicated");
             }
             await _hotelFacilityRepository.UpdateAsync(hotelFacility.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelFacilityEventType.Updated, hotelFacility);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelFacilityEventType.Updated, hotelFacility);
 
         }
     }

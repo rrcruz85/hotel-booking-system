@@ -1,9 +1,11 @@
 ﻿using Reservation.Management.DataAccess.Interfaces;
 using Reservation.Management.Service.Interfaces;
 using Reservation.Management.Service.Translators;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reservation.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class ServicesForHotelService : IServicesForHotelService
     {
         private readonly IHotelServiceRepository _hotelServiceRepository;

@@ -4,8 +4,8 @@ using UserAccount.Management.Service.Interfaces;
 using UserAccount.Management.Service.Translators;
 using System.Diagnostics.CodeAnalysis;
 using Hotel.Booking.Common.Contract.Messaging;
-using Microsoft.Extensions.Configuration;
 using Hotel.Booking.Common.Constant;
+using Hotel.Booking.Common.Contract.Services;
 
 namespace UserAccount.Management.Service.Implementations
 {
@@ -14,13 +14,13 @@ namespace UserAccount.Management.Service.Implementations
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "UserProfileTopicName";
 
         public UserProfileService(
             IUserProfileRepository userProfileRepository,
             IMessagingEngine messagingEngine,
-            IConfiguration config
+            IConfigurationView config
             )
         {
             _userProfileRepository = userProfileRepository;
@@ -32,7 +32,7 @@ namespace UserAccount.Management.Service.Implementations
         { 
             var id = await _userProfileRepository.AddAsync(user.ToEntity());
             user.Id = id;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)UserProfileEventType.Created, user);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)UserProfileEventType.Created, user);
             return id;
         }
 
@@ -44,7 +44,7 @@ namespace UserAccount.Management.Service.Implementations
                 throw new ArgumentException($"User profile {id} does not exist");
             }
             await _userProfileRepository.DeleteAsync(user);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)UserProfileEventType.Deleted, id);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)UserProfileEventType.Deleted, id);
 
         }
 
@@ -63,7 +63,7 @@ namespace UserAccount.Management.Service.Implementations
                 throw new ArgumentException($"User profile {user.Id} does not exist");
             }             
             await _userProfileRepository.UpdateAsync(user.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)UserProfileEventType.Updated, user);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)UserProfileEventType.Updated, user);
         }
     }
 }

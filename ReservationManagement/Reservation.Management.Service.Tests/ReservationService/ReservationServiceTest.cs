@@ -1,5 +1,5 @@
 using Hotel.Booking.Common.Contract.Messaging;
-using Microsoft.Extensions.Configuration;
+using Hotel.Booking.Common.Contract.Services;
 using Moq;
 using NUnit.Framework;
 using Reservation.Management.DataAccess.Interfaces;
@@ -18,7 +18,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
         protected Mock<IReservationHistoryRepository> _reservationHistoryRepository;
         protected Mock<IRoomReservationRepository> _roomReservationRepository;
         protected Mock<IMessagingEngine> _messagingEngine;
-        protected Mock<IConfiguration> _config;
+        protected Mock<IConfigurationView> _config;
         protected CreateUpdateReservation _reservationContext;
         protected DataAccess.Entities.Reservation _reservationEntity;
         protected IReservationService _sut;      
@@ -31,7 +31,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             _reservationHistoryRepository = new Mock<IReservationHistoryRepository>();
             _roomReservationRepository = new Mock<IRoomReservationRepository>();
             _messagingEngine = new Mock<IMessagingEngine>();
-            _config = new Mock<IConfiguration>();
+            _config = new Mock<IConfigurationView>();
 
 
             _sut = new  Implementations.ReservationService(

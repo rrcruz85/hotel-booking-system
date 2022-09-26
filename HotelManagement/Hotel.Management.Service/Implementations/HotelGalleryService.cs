@@ -5,16 +5,17 @@ using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Model;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelGalleryService : IHotelGalleryService
     {
         private readonly IHotelGalleryRepository _hotelGalleryRepository;
         private readonly IMessagingEngine _messagingEngine;
         private readonly IBlobStorageService _blobStorageService;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "HotelGalleryTopicName";
         private readonly string BlobContainer = "hotel";
 
@@ -22,7 +23,7 @@ namespace Hotel.Management.Service.Implementations
             IHotelGalleryRepository hotelGalleryRepository, 
             IMessagingEngine messagingEngine,
             IBlobStorageService blobStorageService,
-            IConfiguration config)
+            IConfigurationView config)
         {
             _hotelGalleryRepository = hotelGalleryRepository;
             _messagingEngine = messagingEngine;
@@ -43,7 +44,7 @@ namespace Hotel.Management.Service.Implementations
 
             var imageId = await _hotelGalleryRepository.AddAsync(newImage);
             newImage.Id = imageId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Created, newImage);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelImageEventType.Created, newImage);
             return imageId;
         }
 
@@ -60,7 +61,7 @@ namespace Hotel.Management.Service.Implementations
             await _blobStorageService.DeleteBlobByName(BlobContainer, fileName);
 
             await _hotelGalleryRepository.DeleteAsync(image);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Deleted, imageId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelImageEventType.Deleted, imageId);
         }
 
         public async Task<List<HotelImage>> GetHotelGalleryAsync(int hotelId)
@@ -94,7 +95,7 @@ namespace Hotel.Management.Service.Implementations
             entity.Description = image.Description;
 
             await _hotelGalleryRepository.UpdateAsync(entity);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelImageEventType.Updated, entity);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelImageEventType.Updated, entity);
         }
     }
 }

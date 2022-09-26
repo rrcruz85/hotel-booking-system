@@ -1,23 +1,25 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Service.Interfaces;
 using Hotel.Management.Service.Translators;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class ServicesForHotelService : IServicesForHotelService
     {
         private readonly IHotelServiceRepository _hotelServiceRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "HotelServiceTopicName";
 
         public ServicesForHotelService(
             IHotelServiceRepository hotelServiceRepository, 
             IMessagingEngine messagingEngine, 
-            IConfiguration config)
+            IConfigurationView config)
         {
             _hotelServiceRepository = hotelServiceRepository;
             _messagingEngine = messagingEngine;
@@ -33,7 +35,7 @@ namespace Hotel.Management.Service.Implementations
 
             var serviceId = await _hotelServiceRepository.AddAsync(hotelService.ToNewEntity());
             hotelService.Id = serviceId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelServiceEventType.Created, hotelService);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelServiceEventType.Created, hotelService);
             return serviceId;
         }
 
@@ -45,7 +47,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel service {hotelServiceId} does not exist");
             }
             await _hotelServiceRepository.DeleteAsync(entity);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelServiceEventType.Deleted, hotelServiceId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelServiceEventType.Deleted, hotelServiceId);
         }
 
         public async Task<Model.HotelService?> GetHotelServiceByAsync(int hotelServiceId)
@@ -72,7 +74,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel service name can not be duplicated");
             }
             await _hotelServiceRepository.UpdateAsync(hotelService.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelServiceEventType.Updated, hotelService);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelServiceEventType.Updated, hotelService);
         }
     }
 }

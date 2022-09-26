@@ -41,7 +41,7 @@ namespace Reservation.Management.Service.Tests.ReservationService
             {
                 Ok = true
             };
-            _config.Setup(m => m["RoomTopicName"]).Returns("room-events");
+            _config.Setup(m => m.AppSettings("RoomTopicName")).Returns("room-events");
 
             _reservationRepository.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<DataAccess.Entities.Reservation, bool>>>())).ReturnsAsync(_reservationEntity);
 

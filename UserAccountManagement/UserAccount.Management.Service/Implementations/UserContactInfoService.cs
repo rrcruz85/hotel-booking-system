@@ -4,8 +4,8 @@ using UserAccount.Management.Service.Interfaces;
 using UserAccount.Management.Service.Translators;
 using System.Diagnostics.CodeAnalysis;
 using Hotel.Booking.Common.Contract.Messaging;
-using Microsoft.Extensions.Configuration;
 using Hotel.Booking.Common.Constant;
+using Hotel.Booking.Common.Contract.Services;
 
 namespace UserAccount.Management.Service.Implementations
 {
@@ -14,13 +14,13 @@ namespace UserAccount.Management.Service.Implementations
     {
         private readonly IUserContactInfoRepository _userContactInfoRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "UserContactInfoTopicName";
 
         public UserContactInfoService(
             IUserContactInfoRepository userContactInfoRepository,
             IMessagingEngine messagingEngine,
-            IConfiguration config)
+            IConfigurationView config)
         {
             _userContactInfoRepository = userContactInfoRepository;
             _messagingEngine = messagingEngine;
@@ -31,7 +31,7 @@ namespace UserAccount.Management.Service.Implementations
         { 
             var id = await _userContactInfoRepository.AddAsync(user.ToEntity());
             user.Id = id;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)UserContactInfoEventType.Created, user);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)UserContactInfoEventType.Created, user);
             return id;
         }
 
@@ -43,7 +43,7 @@ namespace UserAccount.Management.Service.Implementations
                 throw new ArgumentException($"User contact info {userId} does not exist");
             }
             await _userContactInfoRepository.DeleteAsync(user);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)UserContactInfoEventType.Deleted, userId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)UserContactInfoEventType.Deleted, userId);
         }
 
         public async Task<UserContactInfo?> GetUserByIdAsync(int userId)
@@ -61,7 +61,7 @@ namespace UserAccount.Management.Service.Implementations
                 throw new ArgumentException($"User contact info {user.Id} does not exist");
             }             
             await _userContactInfoRepository.UpdateAsync(user.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)UserContactInfoEventType.Updated, user);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)UserContactInfoEventType.Updated, user);
         }
     }
 }

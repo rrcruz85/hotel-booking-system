@@ -1,18 +1,20 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Hotel.Booking.Common.Contract.Messaging;
+using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
 using Hotel.Management.Service.Interfaces;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class HotelCategoryRelationService : IHotelCategoryRelationService
     {
         private readonly IHotelRepository _hotelRepository;
         private readonly IHotelCategoryRepository _hotelCategoryRepository;
         private readonly IHotelCategoryRelationRepository _hotelCategoryRelationRepository;
         private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationView _config;
         private readonly string TopicName = "HotelCategoryRelationTopicName";
 
         public HotelCategoryRelationService(
@@ -20,7 +22,7 @@ namespace Hotel.Management.Service.Implementations
             IHotelCategoryRepository hotelCategoryRepository,
             IHotelCategoryRelationRepository hotelCategoryRelationRepository,
             IMessagingEngine messagingEngine,
-            IConfiguration config)
+            IConfigurationView config)
         {
             _hotelRepository = hotelRepository;
             _hotelCategoryRepository = hotelCategoryRepository;
@@ -49,7 +51,7 @@ namespace Hotel.Management.Service.Implementations
             var entity = new DataAccess.Entities.HotelCategoryRelation { HotelId = hotelId, HotelCategoryId = categotyId };
             var relationId = await _hotelCategoryRelationRepository.AddAsync(entity);
             entity.Id = relationId;
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Created, entity);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelCategoryEventType.Created, entity);
             return relationId;
         }
 
@@ -61,7 +63,7 @@ namespace Hotel.Management.Service.Implementations
                 throw new ArgumentException($"Hotel category relation {hotelCategoryRelationId} does not exist");
             }
             await _hotelCategoryRelationRepository.DeleteAsync(relation);
-            await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Deleted, hotelCategoryRelationId);
+            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelCategoryEventType.Deleted, hotelCategoryRelationId);
         }
 
         public async Task DeleteHotelCategoryRelationAsync(int hotelId, int categotyId)
@@ -70,7 +72,7 @@ namespace Hotel.Management.Service.Implementations
             if (entity != null)
             {
                 await _hotelCategoryRelationRepository.DeleteAsync(entity);
-                await _messagingEngine.PublishEventMessageAsync(_config[TopicName], (int)HotelCategoryEventType.Deleted, entity.Id);
+                await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)HotelCategoryEventType.Deleted, entity.Id);
             }
         }
 

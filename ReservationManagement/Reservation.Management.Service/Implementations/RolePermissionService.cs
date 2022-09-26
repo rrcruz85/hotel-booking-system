@@ -1,38 +1,24 @@
-﻿using UserAccount.Management.DataAccess.Interfaces;
-using UserAccount.Management.Model;
-using UserAccount.Management.Service.Interfaces;
-using UserAccount.Management.Service.Translators;
+﻿using Reservation.Management.DataAccess.Interfaces;
+using Reservation.Management.Model;
+using Reservation.Management.Service.Interfaces;
+using Reservation.Management.Service.Translators;
 using System.Diagnostics.CodeAnalysis;
-using Hotel.Booking.Common.Contract.Messaging;
-using Hotel.Booking.Common.Constant;
-using Hotel.Booking.Common.Contract.Services;
 
-namespace UserAccount.Management.Service.Implementations
+namespace Reservation.Management.Service.Implementations
 {
     [ExcludeFromCodeCoverage]
     public class RolePermissionService : IRolePermissionService
     {
         private readonly IRolePermissionRepository _rolePermissionRepository;
-        private readonly IMessagingEngine _messagingEngine;
-        private readonly IConfigurationView _config;
-        private readonly string TopicName = "RolePermissionTopicName";
 
-        public RolePermissionService(
-            IRolePermissionRepository rolePermissionRepository,
-            IMessagingEngine messagingEngine,
-            IConfigurationView config)
+        public RolePermissionService(IRolePermissionRepository rolePermissionRepository)
         {
             _rolePermissionRepository = rolePermissionRepository;
-            _messagingEngine = messagingEngine;
-            _config = config;
         }         
 
         public async Task<int> CreateRolePermissionAsync(RolePermission role)
         { 
-            var  id = await _rolePermissionRepository.AddAsync(role.ToEntity());
-            role.Id = id;
-            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RolePermissionEventType.Created, role);
-            return id;
+            return await _rolePermissionRepository.AddAsync(role.ToEntity());
         }
 
         public async Task DeleteRolePermissionAsync(int roleId)
@@ -43,7 +29,6 @@ namespace UserAccount.Management.Service.Implementations
                 throw new ArgumentException($"RolePermission {roleId} does not exist");
             }
             await _rolePermissionRepository.DeleteAsync(Role);
-            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RolePermissionEventType.Deleted, roleId);
         }
 
         public async Task<RolePermission?> GetRolePermissionByIdAsync(int roleId)
@@ -66,8 +51,6 @@ namespace UserAccount.Management.Service.Implementations
                 throw new ArgumentException($"Role Permission {role.Id} does not exist");
             }             
             await _rolePermissionRepository.UpdateAsync(role.ToEntity());
-            await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RolePermissionEventType.Updated, role);
-
         }
     }
 }

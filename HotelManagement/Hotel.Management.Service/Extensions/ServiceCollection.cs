@@ -9,9 +9,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Management.Service.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollection
     {
-        [ExcludeFromCodeCoverage]
         public static void AddBusinessServices(this IServiceCollection service)
         {
             service.AddScoped<ICityService, CityService>();
@@ -28,6 +28,7 @@ namespace Hotel.Management.Service.Extensions
             service.AddScoped<IMessagingEngine, MessagingEngine>();
             // Blob 
             service.AddScoped<IBlobStorageService, BlobStorageService>();
+            service.AddScoped<IConfigurationView, ConfigurationView>();
         }
     }
 }
