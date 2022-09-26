@@ -1,6 +1,7 @@
 ﻿using Hotel.Booking.Common.Constant;
 using Reservation.Management.DataAccess;
 using Reservation.Management.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Reservation.Management.Service.Tests.Integration
@@ -25,6 +26,47 @@ namespace Reservation.Management.Service.Tests.Integration
             db.Roles.RemoveRange(db.Roles);
             db.Users.RemoveRange(db.Users);
             InitializeDbForTests(db);
+        }
+
+        public static void BookAllRoomsDbForTests(ReservationManagementContext db, DateTime startTime, DateTime endTime)
+        {
+            db.Reservations.Add(new DataAccess.Entities.Reservation
+            {
+                UserId = 1,
+                Status = (int)ReservationStatus.Booked,
+                EndDate = endTime,
+                StartDate = startTime,
+                PaymentMethodInfo = "123",
+                PaymentMethodType = 1
+            });
+            db.RoomReservations.AddRange(new List<RoomReservation>
+            {
+                new RoomReservation
+                {
+                    Price = 100,
+                    ReservationId = 1,
+                    RoomId = 1 
+                },
+                new RoomReservation
+                {
+                    Price = 100,
+                    ReservationId = 1,
+                    RoomId = 2
+                },
+                new RoomReservation
+                {
+                    Price = 100,
+                    ReservationId = 1,
+                    RoomId = 3
+                },
+                new RoomReservation
+                {
+                    Price = 100,
+                    ReservationId = 1,
+                    RoomId = 4
+                }
+            });
+            db.SaveChanges();
         }
 
         public static List<City> GetSeedingCities()
