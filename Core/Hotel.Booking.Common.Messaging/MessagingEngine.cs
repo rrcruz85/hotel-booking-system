@@ -17,20 +17,20 @@ namespace Hotel.Booking.Common.Messaging
 
         public async Task PublishEventMessageAsync<T>(string queueOrTopicName, int eventType, T payload)
         {
-            var @event = new EventMessage<T>
+            var @event = new EventMessage<string>
             {
                 EventType = eventType,
-                Payload = payload
+                Payload = JsonSerializer.Serialize(payload)
             };
             await _messagingBroker.SendMessageAsync(queueOrTopicName, JsonSerializer.Serialize(@event));
         }
 
         public async Task SheduledEventMessageMessageAsync<T>(string queueOrTopicName, int eventType, T payload, DateTimeOffset scheduleTime)
         {
-            var @event = new EventMessage<T>
+            var @event = new EventMessage<string>
             {
                 EventType = eventType,
-                Payload = payload
+                Payload = JsonSerializer.Serialize(payload)
             };
             await _messagingBroker.SendSheduledMessageAsync(queueOrTopicName, JsonSerializer.Serialize(@event), scheduleTime);
         }
