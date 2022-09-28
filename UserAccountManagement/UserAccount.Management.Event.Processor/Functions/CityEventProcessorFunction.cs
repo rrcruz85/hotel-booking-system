@@ -25,7 +25,7 @@ namespace UserAccount.Management.Event.Processor
         }
  
         [FunctionName("CityEventProcessor")]
-        public async Task CityEventProcessorAsync([ServiceBusTrigger("city-events", "city-event-processor", Connection = "EventMessageConnectionString")] string @eventMessage)
+        public async Task CityEventProcessorAsync([ServiceBusTrigger("city-events", "city-user-account-event-processor", Connection = "EventMessageConnectionString")] string @eventMessage)
         {
             try
             {
