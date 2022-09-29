@@ -109,7 +109,7 @@ namespace Reservation.Management.Service.Tests.Integration
         {
             return new List<User>()
             {
-                new User {IsActive = true, Passoword = "123456", UserName = "TestUser", RoleId = 1}
+                new User {IsActive = true, Password = "123456", UserName = "TestUser", RoleId = 1}
             };
         }
     }

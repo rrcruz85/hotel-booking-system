@@ -341,7 +341,7 @@ namespace Reservation.Management.DataAccess
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Passoword).IsUnicode(false);
+                entity.Property(e => e.Password).IsUnicode(false);
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(100)
@@ -439,9 +439,9 @@ namespace Reservation.Management.DataAccess
             modelBuilder.Entity<Room>().HasData(new Room { Id = 4, HotelId = 1, Number = 106, MaxCapacity = 6, Floor = 1, Status = 1, CurrentPrice = 200, Type = 3 });
             modelBuilder.Entity<Room>().HasData(new Room { Id = 5, HotelId = 1, Number = 107, MaxCapacity = 6, Floor = 1, Status = 1, CurrentPrice = 250, Type = 3 });
 
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name ="Customer" });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "Manager" });
-            modelBuilder.Entity<User>().HasData(new User { Id = 1, IsActive = true, Passoword = "123456", UserName = "user", RoleId = 1 });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name ="Customer" });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "Manager" });
+            modelBuilder.Entity<User>().HasData(new User { Id = 1, IsActive = true, Password = "123456", UserName = "user", RoleId = 1 });
 
 
             OnModelCreatingPartial(modelBuilder);

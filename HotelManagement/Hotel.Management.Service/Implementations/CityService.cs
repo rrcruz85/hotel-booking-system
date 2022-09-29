@@ -1,4 +1,5 @@
 ﻿using Hotel.Booking.Common.Constant;
+using Hotel.Booking.Common.Contract.Exceptions;
 using Hotel.Booking.Common.Contract.Messaging;
 using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
@@ -26,9 +27,9 @@ namespace Hotel.Management.Service.Implementations
 
         public async Task<int> CreateCityAsync(City city)
         {
-            if (await _cityRepository.AnyAsync(c => c.Name == city.Name && c.State == city.Name && c.Country == city.Country))
+            if (await _cityRepository.AnyAsync(c => c.Name == city.Name && c.State == city.State && c.Country == city.Country))
             {
-                throw new ArgumentException($"City name can not be duplicated");
+                throw new InvalidValueException($"City name can not be duplicated");
             }
 
             var cityId = await _cityRepository.AddAsync(city.ToNewEntity());
@@ -42,7 +43,7 @@ namespace Hotel.Management.Service.Implementations
             var city = await _cityRepository.SingleOrDefaultAsync(c => c.Id == cityId);
             if (city == null)
             {
-                throw new ArgumentException($"City {cityId} does not exist");
+                throw new InvalidValueException($"City {cityId} does not exist");
             }
             await _cityRepository.DeleteAsync(city);
             await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)CityEventType.Deleted, cityId);
@@ -77,11 +78,11 @@ namespace Hotel.Management.Service.Implementations
             var entity = await _cityRepository.SingleOrDefaultAsync(c => c.Id == city.Id);
             if (entity == null)
             {
-                throw new ArgumentException($"City {city.Id} does not exist");
+                throw new InvalidValueException($"City {city.Id} does not exist");
             }
-            if (await _cityRepository.AnyAsync(c => c.Id != city.Id && c.Name == city.Name && c.State == city.Name && c.Country == city.Country))
+            if (await _cityRepository.AnyAsync(c => c.Id != city.Id && c.Name == city.Name && c.State == city.State && c.Country == city.Country))
             {
-                throw new ArgumentException($"City name can not be duplicated");
+                throw new InvalidValueException($"City name can not be duplicated");
             }
             await _cityRepository.UpdateAsync(city.ToEntity());
             await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)CityEventType.Updated, city);

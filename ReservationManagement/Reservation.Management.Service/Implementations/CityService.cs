@@ -1,4 +1,5 @@
-﻿using Reservation.Management.DataAccess.Interfaces;
+﻿using Hotel.Booking.Common.Contract.Exceptions;
+using Reservation.Management.DataAccess.Interfaces;
 using Reservation.Management.Model;
 using Reservation.Management.Service.Interfaces;
 using Reservation.Management.Service.Translators;
@@ -18,6 +19,10 @@ namespace Reservation.Management.Service.Implementations
 
         public async Task<int> CreateCityAsync(City city)
         {
+            if (await _cityRepository.AnyAsync(c => c.Id != city.Id && c.Name == city.Name && c.State == city.Name && c.Country == city.Country))
+            {
+                throw new InvalidValueException($"City name can not be duplicated");
+            }
             return await _cityRepository.AddAsync(city.ToEntity());
         }
 
@@ -26,7 +31,7 @@ namespace Reservation.Management.Service.Implementations
             var city = await _cityRepository.SingleOrDefaultAsync(c => c.Id == cityId);
             if (city == null)
             {
-                throw new ArgumentException($"City {cityId} does not exist");
+                throw new InvalidValueException($"City {cityId} does not exist");
             }
             await _cityRepository.DeleteAsync(city);
         }
@@ -60,11 +65,11 @@ namespace Reservation.Management.Service.Implementations
             var entity = await _cityRepository.SingleOrDefaultAsync(c => c.Id == city.Id);
             if (entity == null)
             {
-                throw new ArgumentException($"City {city.Id} does not exist");
+                throw new InvalidValueException($"City {city.Id} does not exist");
             }
             if (await _cityRepository.AnyAsync(c => c.Id != city.Id && c.Name == city.Name && c.State == city.Name && c.Country == city.Country))
             {
-                throw new ArgumentException($"City name can not be duplicated");
+                throw new InvalidValueException($"City name can not be duplicated");
             }
             await _cityRepository.UpdateAsync(city.ToEntity());
         }

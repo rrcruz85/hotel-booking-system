@@ -10,7 +10,7 @@ namespace Reservation.Management.Service.Translators
             {
                Id = user.Id,
                IsActive = user.IsActive,
-               Passoword = user.Passoword,
+               Password = user.Password,
                RoleId = user.RoleId,
                UserName = user.UserName
             };
@@ -22,7 +22,7 @@ namespace Reservation.Management.Service.Translators
             {
                 Id = user.Id,
                 IsActive = user.IsActive,
-                Passoword = user.Passoword,
+                Password = user.Password,
                 RoleId = user.RoleId,
                 UserName = user.UserName
             };

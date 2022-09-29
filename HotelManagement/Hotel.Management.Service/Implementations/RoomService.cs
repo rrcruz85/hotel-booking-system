@@ -1,4 +1,5 @@
 ﻿using Hotel.Booking.Common.Constant;
+using Hotel.Booking.Common.Contract.Exceptions;
 using Hotel.Booking.Common.Contract.Messaging;
 using Hotel.Booking.Common.Contract.Services;
 using Hotel.Management.DataAccess.Interfaces;
@@ -31,7 +32,7 @@ namespace Hotel.Management.Service.Implementations
         {
             if (await _roomRepository.AnyAsync(r => r.HotelId == room.HotelId && r.Number == room.Number))
             {
-                throw new ArgumentException($"Room number can not be duplicated");
+                throw new InvalidValueException($"Room number can not be duplicated");
             }
             var newEntity = room.ToNewEntity();
             newEntity.Status = (int)RoomStatus.Available;
@@ -87,15 +88,10 @@ namespace Hotel.Management.Service.Implementations
             return new Dictionary<int, string>
             {
                 {(int)RoomStatus.Created,  RoomStatus.Created.ToString()},
-
                 {(int)RoomStatus.Updated,  RoomStatus.Updated.ToString()},
-
                 {(int)RoomStatus.Deleted,  RoomStatus.Deleted.ToString()},
-
                 {(int)RoomStatus.Available,  RoomStatus.Available.ToString()},
-
                 {(int)RoomStatus.OutOfService,  RoomStatus.OutOfService.ToString()},
-
                 {(int)RoomStatus.Booked,  RoomStatus.Booked.ToString()},
             };
         }
@@ -105,9 +101,7 @@ namespace Hotel.Management.Service.Implementations
             return new Dictionary<int, string>
             {
                 {(int)RoomType.Simple,  RoomType.Simple.ToString()},
-
                 {(int)RoomType.Double,  RoomType.Double.ToString()},
-
                 {(int)RoomType.Triple,  RoomType.Triple.ToString()} 
             };
         }
@@ -117,11 +111,11 @@ namespace Hotel.Management.Service.Implementations
             var entity = await _roomRepository.SingleOrDefaultAsync(c => c.Id == room.Id);
             if (entity == null)
             {
-                throw new ArgumentException($"Room {room.Id} does not exist");
+                throw new InvalidValueException($"Room {room.Id} does not exist");
             }
             if (await _roomRepository.AnyAsync(r => r.Id != room.Id && r.Number == room.Number && r.HotelId == room.HotelId))
             {
-                throw new ArgumentException($"Room number can not be duplicated");
+                throw new InvalidValueException($"Room number can not be duplicated");
             }
             await _roomRepository.UpdateAsync(room.ToEntity());
             await _messagingEngine.PublishEventMessageAsync(_config.AppSettings(TopicName), (int)RoomEventType.Updated, room);
@@ -132,7 +126,7 @@ namespace Hotel.Management.Service.Implementations
             var entity = await _roomRepository.SingleOrDefaultAsync(c => c.Id == roomId);
             if (entity == null)
             {
-                throw new ArgumentException($"Room {roomId} does not exist");
+                throw new InvalidValueException($"Room {roomId} does not exist");
             }
             entity.Status = status;
             await _roomRepository.UpdateAsync(entity);            
